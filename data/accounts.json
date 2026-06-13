@@ -1,0 +1,199 @@
+{
+    "note": "Simulated financial data for real-world use cases \u2014 budgeting apps, fintech UI demo, personal finance dashboards. No account belongs to a real customer.",
+    "generated_on": "2025-11-30T00:00:00+05:30",
+    "bank": {
+        "name": "Union Europa Bank AG",
+        "branding": "UEB Financial Group",
+        "branch": "Frankfurt Main Branch",
+        "contact": {
+            "phone": "+49-69-4502-8770",
+            "email": "support@ueb-finance.eu",
+            "address": "Kaiserstra\u00dfe 45, Frankfurt am Main, Germany"
+        }
+    },
+    "accounts": [
+        {
+            "account_id": "UEB784231-SAV",
+            "account_holder": {
+                "full_name": "hello123",
+                "dob": "1988-05-14",
+                "customer_id": "UEB-CUST-118204"
+            },
+            "account_type": "Saving Account",
+            "account_number": "78423100984213",
+            "iban": "DE38 5001 0517 8423 1009 84",
+            "bic": "UEBDDEFFXXX",
+            "currency": "EUR",
+            "balance": 845552.95,
+            "available_balance": 831441.95,
+            "interest_rate": 1.1,
+            "opened_on": "2017-02-09",
+            "status": "active",
+            "transactions": [
+                {
+                    "id": "TXN-1764767722-821",
+                    "date": "2025-12-03 18:44:29",
+                    "type": "credit",
+                    "amount": 1000,
+                    "description": "Testing",
+                    "balance_after": 831441.95
+                },
+                {
+                    "id": "TXN-1764771121-424",
+                    "date": "2025-12-03 19:41:41",
+                    "type": "credit",
+                    "amount": 12000,
+                    "description": "testing1",
+                    "balance_after": 843441.95
+                },
+                {
+                    "id": "TXN-1764772699-868",
+                    "date": "2025-12-03 20:08:03",
+                    "type": "debit",
+                    "amount": 100,
+                    "description": "minus",
+                    "balance_after": 843341.95
+                },
+                {
+                    "id": "TXN-1764772721-748",
+                    "date": "2025-12-03 20:08:19",
+                    "type": "credit",
+                    "amount": 100,
+                    "description": "plus",
+                    "balance_after": 843441.95
+                },
+                {
+                    "id": "TXN-1764772939-209",
+                    "date": "2025-12-03 20:11:20",
+                    "type": "credit",
+                    "amount": 1222,
+                    "description": "Testing",
+                    "balance_after": 844663.95
+                },
+                {
+                    "id": "TXN-1764773598-264",
+                    "date": "2025-12-03 20:12:19",
+                    "type": "debit",
+                    "amount": 1,
+                    "description": "Testing",
+                    "balance_after": 844662.95
+                },
+                {
+                    "id": "TXN-1764778700-187",
+                    "date": "2025-12-03 21:48:10",
+                    "type": "credit",
+                    "amount": 1,
+                    "description": "test1",
+                    "balance_after": 844663.95
+                },
+                {
+                    "id": "TXN-1764778713-705",
+                    "date": "2025-12-03 21:48:20",
+                    "type": "debit",
+                    "amount": 1,
+                    "description": "test2",
+                    "balance_after": 844662.95
+                },
+                {
+                    "id": "TXN-1764778728-295",
+                    "date": "2025-12-03 21:48:33",
+                    "type": "credit",
+                    "amount": 1,
+                    "description": "test3",
+                    "balance_after": 844663.95
+                },
+                {
+                    "id": "TXN-1764854778-556",
+                    "date": "2025-12-04 18:56:05",
+                    "type": "debit",
+                    "amount": 111,
+                    "description": "transaction",
+                    "balance_after": 844552.95
+                },
+                {
+                    "id": "TXN-1780921357-590",
+                    "date": "2026-06-08 17:52:24",
+                    "type": "credit",
+                    "amount": 1000,
+                    "description": "testing",
+                    "balance_after": 845552.95
+                }
+            ]
+        },
+        {
+            "account_id": "UEB784231-CUR",
+            "account_holder": {
+                "full_name": "Vishal123",
+                "dob": "1988-05-14",
+                "customer_id": "UEB-CUST-118204"
+            },
+            "account_type": "current",
+            "account_number": "78423100462955",
+            "iban": "DE87 5001 0517 8423 1004 62",
+            "bic": "UEBDDEFFCUR",
+            "currency": "EUR",
+            "balance": 0.10000000000582077,
+            "available_balance": 11542.1,
+            "overdraft_limit": 400,
+            "overdraft_used": 0,
+            "opened_on": "2020-09-15",
+            "status": "active",
+            "transactions": [
+                {
+                    "id": "TXN-1764770435-579",
+                    "date": "2025-12-03 19:30:23",
+                    "type": "credit",
+                    "amount": 455,
+                    "description": "teseitng23243234",
+                    "balance_after": 11542.1
+                },
+                {
+                    "id": "TXN-1764771708-989",
+                    "date": "2025-12-03 19:51:38",
+                    "type": "credit",
+                    "amount": 1234,
+                    "description": "testing1234",
+                    "balance_after": 12776.1
+                },
+                {
+                    "id": "TXN-1764772752-258",
+                    "date": "2025-12-03 20:08:41",
+                    "type": "credit",
+                    "amount": 121,
+                    "description": "testing 2",
+                    "balance_after": 12897.1
+                },
+                {
+                    "id": "TXN-1764772880-886",
+                    "date": "2025-12-03 20:10:55",
+                    "type": "credit",
+                    "amount": 123333,
+                    "description": "testing",
+                    "balance_after": 136230.1
+                },
+                {
+                    "id": "TXN-1780921395-770",
+                    "date": "2026-06-08 17:52:59",
+                    "type": "debit",
+                    "amount": 123456,
+                    "description": "Hello",
+                    "balance_after": 12774.100000000006
+                },
+                {
+                    "id": "TXN-1780921427-569",
+                    "date": "2026-06-08 17:53:22",
+                    "type": "debit",
+                    "amount": 12774,
+                    "description": "testing",
+                    "balance_after": 0.10000000000582077
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "records": 2,
+        "schema_version": "2.0-realistic",
+        "last_sync": "2025-11-30T00:00:00Z",
+        "region": "EU Banking Zone"
+    }
+}

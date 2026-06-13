@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <title>Financial Overview - Clone</title>
+
+
+    <style>
+      /* Custom styles for transaction display */
+      .credit {
+        color: #198754; /* Success green */
+        font-weight: 600;
+      }
+      .debit {
+        color: #dc3545; /* Danger red */
+        font-weight: 600;
+      }
+      .negative-balance {
+        color: #dc3545 !important;
+        font-weight: 600;
+      }
+    </style>
+    <style>
+      /*
+       * Custom CSS for the Financial Dashboard Clone
+       */
+
+      /* ---------------------------------
+         GLOBAL STYLES & COLORS
+         --------------------------------- */
+      :root {
+        --db-blue: #003057; /* A deep, dark blue for primary elements and text */
+        --db-light-blue: #0076a8; /* The vibrant blue for buttons and accents */
+        --db-active-link: #0076a8; /* Active link color */
+        --db-bg-light-grey: #f7f7f7; /* Background color for light sections/main body */
+        --db-border-color: #e5e5e5; /* Light border color */
+        --db-text-dark: #333; /* Standard dark text */
+        --db-negative-red: #d9534f; /* Red for negative balances */
+        /* --- MODAL SPECIFIC COLORS (New) --- */
+        --db-success-green: #28a745;
+        --db-success-bg: #e6ffed;
+        --db-disabled-btn-bg: #e0e0e0;
+        --db-disabled-btn-color: #888;
+        --db-progress-bg: #e9ecef;
+      }
+
+      body {
+        font-family: "Arial", sans-serif; /* Using a clean, standard sans-serif font */
+        background-color: white; /* The image background is white */
+        color: var(--db-text-dark);
+      }
+
+
+      
+
+      .main-content-padding {
+        padding-left: 5rem !important; /* Matches the left padding in the image */
+        padding-right: 5rem !important; /* Matches the right padding in the image */
+        max-width: 1400px; /* Optional: Sets a max width for large screens */
+        margin: 0 auto;
+      }
+
+      /* ---------------------------------
+         NAVBAR (TOP)
+         --------------------------------- */
+      .custom-navbar {
+        background-color: white;
+        border-bottom: 1px solid var(--db-border-color);
+      }
+
+      /* NEW: Custom Border and Shadow for Dropdown Menus */
+      .dropdown-menu {
+        border: 1px solid var(--db-border-color); /* Use the defined light border color */
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow for visibility */
+      }
+
+      .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+
+      .navbar-nav .nav-link {
+        color: var(--db-blue);
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 2px solid transparent;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: var(--db-active-link);
+      }
+
+      .navbar-nav .active-link {
+        font-weight: 600;
+        border-bottom-color: var(--db-active-link);
+        color: var(--db-active-link);
+      }
+
+      /* Ensure dropdown links still look like nav-links */
+      .navbar-nav .dropdown-toggle {
+        color: var(--db-blue);
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 2px solid transparent;
+      }
+      .navbar-nav .dropdown-toggle:hover {
+        color: var(--db-active-link);
+      }
+
+      .custom-nav-icons .nav-link {
+        color: var(--db-blue);
+        font-size: 0.85rem;
+      }
+
+      .custom-nav-icons .profile-icon {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* ---------------------------------
+         SUB-NAVBAR
+         --------------------------------- */
+      .sub-nav-bar {
+        background-color: var(--db-bg-light-grey);
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--db-border-color);
+      }
+
+      .sub-nav-bar .tab-link {
+        text-decoration: none;
+        color: var(--db-text-dark);
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        display: inline-block;
+      }
+
+      .sub-nav-bar .tab-link.active {
+        font-weight: 600;
+        color: var(--db-active-link);
+        background-color: white;
+        border-radius: 4px;
+      }
+
+      /* ---------------------------------
+         BUTTONS & HEADERS
+         --------------------------------- */
+      .main-heading {
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: var(--db-blue);
+      }
+
+      .custom-blue-btn {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .custom-blue-btn:hover {
+        background-color: #006390; /* Slightly darker blue on hover */
+        border-color: #006390;
+      }
+
+      .btn-icon {
+        background: none;
+        border: none;
+        color: var(--db-blue);
+        font-size: 1.1rem;
+        padding: 0.5rem;
+      }
+
+      /* ---------------------------------
+         OVERALL BALANCE CARD
+         --------------------------------- */
+      .overall-balance-card {
+        background-color: var(--db-bg-light-grey);
+        border: none;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+      }
+
+      .overall-balance-card .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .overall-balance-card .balance-amount {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+
+      .overall-balance-card .adjust-link {
+        font-size: 0.8rem;
+        color: var(--db-light-blue);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* ---------------------------------
+         TAB NAVIGATION
+         --------------------------------- */
+      .tab-navigation {
+        border-bottom: 2px solid var(--db-border-color);
+        margin-bottom: 1.5rem !important;
+      }
+
+      .tab-link {
+        text-decoration: none;
+        color: var(--db-text-dark);
+        padding: 0.5rem 1.5rem;
+        margin-right: 1rem;
+        border-bottom: 2px solid transparent;
+        font-size: 0.9rem;
+      }
+
+      .tab-link.active {
+        border-bottom-color: var(--db-active-link);
+        font-weight: 600;
+        color: var(--db-active-link);
+      }
+
+      .demo-alert {
+        background-color: #fff9e6; /* Light yellow background */
+        color: #856404; /* Darker text */
+        border-color: #ffeeba;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+      }
+
+      /* ---------------------------------
+         FINANCIAL ITEMS
+         --------------------------------- */
+
+      /* New class for the Accounts & Cards container (outer border) */
+      .financial-card-box {
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem; /* Add spacing below the box */
+      }
+
+      /* Rules for the inner section when wrapped in the box */
+      .financial-card-box > .financial-section {
+        border-bottom: none !important; /* Remove the section divider line */
+        padding-bottom: 0 !important;
+        margin-top: 0 !important; /* Ensure no top margin */
+      }
+
+      /* Ensure the last item in the wrapped section has no border */
+      .financial-card-box .financial-item:last-child {
+        border-bottom: none !important;
+      }
+
+      .financial-section {
+        /* Removed original border-bottom: 1px solid var(--db-border-color); as it's not needed if everything is boxed */
+        padding-bottom: 1rem;
+      }
+
+      .section-header .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .section-header .section-total {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .financial-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        /* ENHANCEMENT: Add hover effect and light border for item separation */
+        border-bottom: 1px solid var(--db-border-color);
+        transition: background-color 0.2s;
+        cursor: pointer;
+      }
+
+      .financial-item:hover {
+        background-color: var(--db-bg-light-grey);
+      }
+
+      .financial-item:first-of-type {
+        border-top: none; /* Remove border from the first item after the header */
+      }
+
+      /* Tweak to handle the top/bottom borders nicely */
+      .financial-section > .financial-item:last-of-type {
+        border-bottom: none;
+      }
+      /* Removed .financial-section { border-bottom: 1px solid var(--db-border-color); } as all sections are now boxed */
+
+      .item-icon {
+        font-size: 1.2rem;
+        color: var(--db-blue);
+        width: 40px;
+        flex-shrink: 0;
+        text-align: center;
+      }
+
+      .item-details {
+        flex-grow: 1;
+        margin-right: auto;
+      }
+
+      .item-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--db-blue);
+      }
+
+      .item-number {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+
+      .item-amount {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        text-align: right;
+        width: 150px; /* Fixed width for alignment */
+        flex-shrink: 0;
+      }
+
+      .negative-balance {
+        color: var(--db-negative-red);
+      }
+
+      /* Special styling for the 'Other products' currency account */
+      .other-product-item .item-amount {
+        font-weight: normal; /* Override bold */
+        color: var(--db-text-dark);
+      }
+      .other-product-item .item-amount span {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+      .other-product-item .item-amount small {
+        font-size: 0.8rem;
+        color: #6c757d !important;
+        font-weight: 400;
+      }
+
+      /* ---------------------------------
+         ADDITIONAL FEATURES
+         --------------------------------- */
+      .additional-features .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-text-dark);
+      }
+
+      .feature-card {
+        /* ENHANCEMENT: Add a subtle shadow to the card */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px; /* Slightly more rounded */
+        padding: 1rem 1.5rem;
+        background-color: white;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        transition: box-shadow 0.3s;
+      }
+
+      .feature-card:hover {
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 1.8rem;
+        color: var(--db-light-blue);
+        padding: 0.5rem;
+        border: 1px solid var(--db-border-color);
+        border-radius: 6px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .feature-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .feature-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #5cb85c; /* Green color for positive value */
+      }
+
+      .btn-icon-arrow {
+        background: none;
+        border: none;
+        color: var(--db-light-blue);
+        font-size: 1.1rem;
+      }
+
+      /* ---------------------------------
+         RESPONSIVENESS (Bootstrap handles most, but specific tweaks)
+         --------------------------------- */
+/* Responsiveness Tweaks */
+@media (max-width: 992px) {
+  .main-content-padding {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .custom-nav-icons {
+    /* REQUIRED: Overrides 'display: none' from the complete stylesheet
+       to ensure the icons are visible on mobile */
+    display: flex !important;
+    
+    /* Make the items stack vertically (in a column) */
+    flex-direction: column !important; 
+    
+    /* Align links to the left edge of the mobile menu */
+    align-items: flex-start !important; 
+    
+    /* Ensure the container takes up the full width */
+    width: 100%;
+    
+    /* Add vertical padding and a separator line */
+    padding: 0.5rem 0; 
+    border-top: 1px solid var(--db-border-color); 
+    margin-top: 0.5rem;
+  }
+
+  /* Style adjustment for the individual links/profile text */
+  .custom-nav-icons a.nav-link,
+  .custom-nav-icons span.profile-icon {
+    margin: 0 !important; /* Remove all margins to prevent horizontal conflicts */
+    margin-bottom: 0.25rem !important; /* Add small margin for vertical spacing */
+    padding-left: 0 !important; /* Align to the left edge */
+  }
+
+  .navbar-collapse {
+    margin-top: 0;
+    border-top: none; 
+  }
+}
+
+      /* ---------------------------------
+         MODAL SPECIFIC STYLES
+         --------------------------------- */
+      .sepa-modal-content {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .sepa-modal-header {
+        background-color: white;
+        border-bottom: 1px solid var(--db-border-color);
+        padding: 1.5rem 2rem;
+      }
+
+      .sepa-modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .sepa-modal-body {
+        padding: 1.5rem 2rem;
+        background-color: var(--db-bg-light-grey);
+      }
+
+      /* Adjust modal body padding for smaller screens */
+      @media (max-width: 768px) {
+        .sepa-modal-body {
+          padding: 1rem 1rem;
+        }
+        .sepa-modal-header {
+          padding: 1rem 1rem;
+        }
+        .sepa-modal-footer {
+          padding: 1rem 1rem;
+        }
+      }
+
+      .sepa-modal-footer {
+        background-color: white;
+        border-top: 1px solid var(--db-border-color);
+        padding: 1rem 2rem;
+      }
+
+      /* Custom Buttons for Modal */
+      .custom-blue-btn.modal-nav {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+
+      .custom-back-btn {
+        border-color: var(--db-border-color);
+        color: var(--db-blue);
+        background-color: white;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+      .custom-back-btn:hover {
+        background-color: var(--db-bg-light-grey);
+        border-color: #ccc;
+        color: var(--db-blue);
+      }
+
+      .custom-continue-btn-disabled {
+        background-color: var(--db-disabled-btn-bg);
+        border-color: var(--db-disabled-btn-bg);
+        color: var(--db-disabled-btn-color);
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        cursor: not-allowed;
+      }
+
+      /* Headers & Links */
+      .section-title-sm {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        margin-bottom: 0.5rem;
+      }
+
+      .action-link {
+        color: var(--db-light-blue);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      /* Forms and Inputs */
+      .custom-form-control {
+        border-color: var(--db-border-color);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+      /* ENHANCEMENT: Blue focus ring */
+      .custom-form-control:focus {
+        border-color: var(--db-light-blue);
+        box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.25);
+      }
+
+      .custom-form-control:read-only {
+        background-color: #eee;
+        cursor: default;
+      }
+
+      .custom-select {
+        border-color: var(--db-border-color);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        color: var(--db-blue);
+        appearance: none; /* Remove default arrow */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        font-weight: 600; /* Make text bold for internal accounts */
+        cursor: pointer;
+      }
+      .custom-select:focus {
+        border-color: var(--db-light-blue);
+        box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.25);
+      }
+      .select-container {
+        position: relative;
+      }
+
+      .custom-check-btn {
+        font-size: 0.85rem;
+        padding: 0.7rem 0.9rem;
+        font-weight: 500;
+      }
+      .custom-check-btn[disabled] {
+        background-color: var(--db-disabled-btn-bg) !important;
+        border-color: var(--db-disabled-btn-bg) !important;
+        color: var(--db-disabled-btn-color) !important;
+        cursor: not-allowed;
+      }
+
+      .custom-alert-success {
+        background-color: var(--db-success-bg);
+        border-color: var(--db-success-bg);
+        color: var(--db-success-green);
+        font-size: 0.85rem;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      /* NEW: Suggestion List Styling */
+      .suggestion-item {
+        transition: background-color 0.15s ease-in-out;
+        border-radius: 6px;
+      }
+      .suggestion-item:hover {
+        background-color: #f0f0f0; /* Slight highlight on hover */
+      }
+
+      .custom-checkbox .form-check-input {
+        border-color: var(--db-border-color);
+      }
+      .custom-checkbox .form-check-input:checked {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+      .custom-checkbox .form-check-label {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* Progress Indicator */
+      .progress-indicator {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .progress-indicator .step {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        background-color: var(--db-light-blue);
+        border-radius: 4px;
+        padding: 0.2rem 0.6rem;
+        margin-right: 0.75rem;
+      }
+      .progress-indicator .step-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--db-text-dark);
+      }
+
+      .progress-line-container {
+        width: 100%;
+        height: 4px;
+        background-color: var(--db-progress-bg);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .progress-line {
+        height: 100%;
+        background-color: var(--db-light-blue);
+        transition: width 0.3s ease-in-out;
+      }
+
+      /* Step 1: Account Card and Instant Payment */
+      .account-item-card {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        /* ENHANCEMENT: Slightly softer look with a shadow on the main card */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .account-item-card .item-icon-circle {
+        background-color: var(--db-bg-light-grey);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--db-blue);
+      }
+      .account-item-card .item-details {
+        margin-right: auto;
+      }
+      .account-item-card .item-name {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+      .account-item-card .item-number {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+      .account-item-card .item-amount span {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+
+      .form-section {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--db-border-color);
+        margin-bottom: 1.5rem;
+      }
+      .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .feature-icon-sm {
+        font-size: 1.2rem;
+        color: var(--db-light-blue);
+      }
+      .custom-switch .form-check-input {
+        height: 1.5em;
+        width: 2.7em;
+        background-color: var(--db-border-color);
+        border-color: var(--db-border-color);
+      }
+      .custom-switch .form-check-input:checked {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+
+      /* Step 2: Amount Input */
+      .custom-amount-input {
+        max-width: 250px;
+      }
+      .custom-amount-input .custom-form-control-lg {
+        padding: 0.8rem 1rem;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        text-align: right;
+      }
+      .custom-amount-input .custom-input-group-text {
+        background-color: white;
+        border-color: var(--db-border-color);
+        color: var(--db-blue);
+        font-weight: 600;
+        font-size: 1.3rem;
+        padding: 0.8rem 1rem;
+      }
+
+      /* Step 3: Summary Card and Approval */
+      .transfer-summary-card {
+        background-color: white;
+        /* ENHANCEMENT: Add a subtle shadow */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .transfer-summary-card .summary-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .transfer-summary-card .item-avatar {
+        width: 50px;
+        height: 50px;
+        background-color: var(--db-light-blue);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .transfer-summary-card .transfer-arrow {
+        font-size: 1.5rem;
+        color: var(--db-border-color);
+        margin: 0 1rem;
+        flex-shrink: 0;
+      }
+      .transfer-summary-card .summary-details {
+        padding-top: 1rem;
+        border-top: 1px solid var(--db-border-color);
+        margin-top: 1.5rem;
+      }
+      .transfer-summary-card .detail-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.2rem;
+      }
+      .transfer-summary-card .detail-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .approval-card {
+        background-color: var(--db-bg-light-grey);
+        /* ENHANCEMENT: Make the border slightly more prominent for focus */
+        border: 2px solid var(--db-light-blue);
+        border-radius: 8px;
+        padding: 2rem 1.5rem;
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        padding-top: 3.5rem;
+        box-shadow: 0 0 10px rgba(0, 118, 168, 0.1);
+      }
+
+      .approval-icon-container {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        /* ENHANCEMENT: Blue ring around the icon */
+        border: 2px solid var(--db-light-blue);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .approval-icon .db-logo-icon {
+        width: 32px;
+        height: 32px;
+        stroke: var(--db-light-blue);
+        fill: none;
+      }
+
+      .approval-device {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+      .approval-heading {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        margin-bottom: 0.75rem;
+      }
+      .approval-text {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* Styles for Success Message Modal */
+      .success-modal-content {
+        border-radius: 8px;
+        /* ENHANCEMENT: Add a subtle shadow */
+        border: 1px solid var(--db-success-green);
+        background-color: var(--db-success-bg);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+      }
+      .success-modal-header {
+        background-color: var(--db-success-bg);
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .success-modal-body {
+        background-color: var(--db-success-bg);
+        text-align: center;
+        padding-top: 0;
+      }
+      .success-modal-footer {
+        background-color: var(--db-success-bg);
+        border-top: none;
+      }
+      .success-icon-container {
+        width: 60px;
+        height: 60px;
+        background-color: var(--db-success-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem auto;
+      }
+      .success-icon-container i {
+        color: white;
+        font-size: 2.5rem;
+      }
+      .success-title {
+        color: var(--db-blue);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .success-text {
+        color: var(--db-text-dark);
+        font-size: 0.9rem;
+      }
+      .success-highlight {
+        font-weight: 600;
+      }
+      .btn-new-transfer {
+        border: 1px solid var(--db-light-blue);
+        color: var(--db-light-blue);
+        background-color: transparent;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+      .btn-new-transfer:hover {
+        background-color: rgba(0, 118, 168, 0.05);
+        color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+
+      /* New Modal: Adjust Balance Modal */
+      .adjust-modal-header {
+        background-color: var(--db-light-blue);
+        color: white;
+        border-radius: 8px 8px 0 0;
+        border-bottom: none;
+        padding: 1.5rem 2rem;
+      }
+      .adjust-modal-header .btn-close {
+        filter: invert(1);
+      }
+      .adjust-modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: white;
+      }
+      .adjust-modal-body {
+        padding: 2rem;
+        background-color: white;
+      }
+      .adjust-modal-footer {
+        background-color: var(--db-bg-light-grey);
+        border-top: 1px solid var(--db-border-color);
+        padding: 1rem 2rem;
+      }
+
+      .account-toggle-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px dashed var(--db-border-color);
+      }
+      .account-toggle-item:last-of-type {
+        border-bottom: none;
+      }
+
+      .account-toggle-item .toggle-name {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+      .account-toggle-item .toggle-amount {
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-align: right;
+        min-width: 80px;
+      }
+      .account-toggle-item .toggle-amount.negative-balance {
+        color: var(--db-negative-red);
+      }
+
+      .modal-current-balance {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+      .modal-current-balance small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #6c757d;
+      }
+
+      /* Loading Content Spinner */
+      .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 200px;
+        justify-content: center;
+      }
+      .loading-content .spinner-border {
+        color: var(--db-light-blue);
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      /* ---------------------------------
+         LOADING OVERLAY STYLES (NEW)
+         --------------------------------- */
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        /* Cover to the bottom of the main content area */
+        bottom: 0;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.95
+        ); /* Semi-transparent white */
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        min-height: 500px; /* Ensure it has a minimum height to be visible */
+      }
+
+      .loading-spinner {
+        width: 3rem;
+        height: 3rem;
+        border: 4px solid var(--db-border-color);
+        border-top-color: var(--db-light-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* 2. Hide dashboard elements when printing */
+      .no-print,
+      .dashboard-content {
+        display: block; /* Shown by default */
+      }
+      /* Added a print button specific style */
+      .print-button {
+        background-color: white;
+        border: 1px solid var(--db-border-color);
+        color: var(--db-blue);
+      }
+      .print-button:hover {
+        background-color: var(--db-bg-light-grey);
+        color: var(--db-blue);
+      }
+
+      /* Styles for print statement details (hidden by default) */
+      .print-statement-details {
+        display: none;
+      }
+
+      /* Enforce minimum widths for key columns on smaller screens for better wrap control */
+      @media (max-width: 768px) {
+        #statement-table td, #statement-table th {
+          font-size: 0.85rem; /* Slightly smaller font for better fit on mobile */
+        }
+        /* Ensure Date, Amount, and Balance After columns don't collapse completely */
+        #statement-table th:nth-child(1), /* Date */
+        #statement-table td:nth-child(1) {
+          min-width: 90px;
+        }
+        #statement-table th:nth-child(4), /* Amount */
+        #statement-table td:nth-child(4),
+        #statement-table th:nth-child(5), /* Balance After */
+        #statement-table td:nth-child(5) {
+          min-width: 110px;
+        }
+      }
+
+      @media print {
+        /* *** NEW: Print in Landscape Orientation *** */
+        @page {
+          size: A4 landscape; 
+        }
+
+        /* 1. Hide unwanted elements for printing */
+        .no-print,
+        .custom-navbar,
+        .sub-nav-bar {
+            display: none !important;
+        }
+
+        /* 3. Show all content when printing, remove transitions/transforms */
+        .dashboard-content,
+        .tab-content {
+          display: block !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+
+        .main-content-padding {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          max-width: 100% !important;
+        }
+        .tab-content {
+          padding-top: 0 !important;
+        }
+
+        /* 3. Show header/footer details only for printing */
+        .print-statement-details {
+          display: block !important;
+        }
+
+        /* 4. Ensure table borders are visible */
+        #statement-table,
+        #statement-table thead,
+        #statement-table tbody,
+        #statement-table th,
+        #statement-table td {
+          border-color: #000 !important;
+          color: #000 !important;
+        }
+        
+        /* *** NEW: Optimize Font for Print Legibility and Density *** */
+        body {
+          font-size: 10pt; /* Standard print font size */
+        }
+        #statement-table td, 
+        #statement-table th {
+          font-size: 9pt; /* Smaller font for table to fit more data in landscape */
+          padding: 0.3rem !important; /* Reduced padding */
+        }
+      }
+      .sub-nav-bar .main-content-padding {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox - hide scrollbar */
+      }
+      .sub-nav-bar .main-content-padding::-webkit-scrollbar {
+        display: none; /* Chrome/Safari - hide scrollbar */
+      }
+      .sub-nav-bar .tab-link {
+        flex-shrink: 0;
+        padding: 12px 16px;
+        font-weight: 600;
+      }
+      .credit {
+        color: #198754; /* success green */
+      }
+      .debit {
+        color: #dc3545; /* danger red */
+      }
+    </style>
+
+
+
+
+<style>
+
+.header-bar {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border-radius: 18px;
+  padding: 22px 25px;
+  margin-bottom: 20px;
+}
+
+.card-ui {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.08);
+  padding: 25px;
+}
+
+label { font-size:.85rem; font-weight:500; }
+
+.form-control,.form-select {
+  border-radius: 12px;
+  padding: 10px;
+}
+
+thead th {
+  background: #111827!important;
+  color: white;
+}
+
+.credit { color:#16a34a; font-weight:600 }
+.debit { color:#dc2626; font-weight:600 }
+
+.recent-row {
+  background: linear-gradient(90deg,#fff7cc,#ffeaa3)!important;
+}
+
+.badge { border-radius: 8px; }
+
+.empty {
+  text-align: center;
+  font-weight: 500;
+  color: #6b7280;
+}
+</style>
+  </head>
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-light custom-navbar sticky-top no-print"
+    >
+      <div class="container-fluid main-content-padding">
+        <a class="navbar-brand logo-text" href="#">
+          <i class="bi bi-bank me-2"></i>Bank Name
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link active-link"
+                aria-current="page"
+                href="financial-overview.html"
+                >My Finances</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="payment-overview.html">Transfer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Invest</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+          </ul>
+          <div
+            class="d-flex align-items-lg-center flex-column flex-lg-row custom-nav-icons ms-lg-auto"
+          >
+            <a class="nav-link me-lg-3" href="#">
+              <i class="bi bi-chat-dots"></i> Messages
+            </a>
+            <a class="nav-link me-lg-3" href="#">
+              <i class="bi bi-question-circle"></i> Help
+            </a>
+            <span class="profile-icon me-lg-3 mb-2 mb-lg-0"><a href="deposits.php">M. Mustermann</a></span>
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <nav class="sub-nav-bar mb-4 shadow-sm no-print" id="sub-nav-bar">
+      <div class="container-fluid main-content-padding">
+        <a
+          href="financial-overview.html#Overview"
+          class="tab-link"
+        >
+          Overview
+        </a>
+        <a
+          href="statements.html"
+          class="tab-link active"
+        >
+          Account Statements
+        </a>
+        <a
+          href="financial-overview.html#Insurances"
+          class="tab-link"
+        >
+          Insurances
+        </a>
+      </div>
+    </nav>
+
+
+
+
+<div class="container my-4">
+
+<h3 class="mb-4">Transaction History</h3>
+
+<div class="row mb-3 g-3">
+  <div class="col-md-3">
+    <label class="fw-bold">Account</label>
+    <select id="accountFilter" class="form-select"></select>
+  </div>
+  <div class="col-md-2">
+    <label class="fw-bold">From</label>
+    <input type="date" id="fromDate" class="form-control">
+  </div>
+  <div class="col-md-2">
+    <label class="fw-bold">To</label>
+    <input type="date" id="toDate" class="form-control">
+  </div>
+  <div class="col-md-3">
+    <label class="fw-bold">Search</label>
+    <input type="text" id="searchInput" class="form-control" placeholder="Description / TXN ID">
+  </div>
+</div>
+
+<!-- TABLE IS HIDDEN INITIALLY -->
+<div id="tableSection" style="display:none;">
+
+<div class="table-responsive">
+<table class="table table-striped table-hover">
+<thead class="table-dark">
+<tr>
+<th>Date</th>
+<th>Description</th>
+<th>Type</th>
+<th class="text-end">Amount</th>
+<th class="text-end">Balance After</th>
+</tr>
+</thead>
+<tbody id="statement-table-body"></tbody>
+</table>
+</div>
+
+<nav class="mt-3">
+<ul class="pagination justify-content-end" id="pagination"></ul>
+</nav>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    
+<script>
+let allAccountData = null;
+let currentPage = 1;
+const rowsPerPage = 10;
+
+// PURE DATE PARSER (NO ISO / NO T)
+function parseDateTime(str) {
+  const [date, time] = str.split(" ");
+  const [y, m, d] = date.split("-").map(Number);
+  const [h, min, s] = time.split(":").map(Number);
+  return new Date(y, m - 1, d, h, min, s);
+}
+
+// Highlight today's transactions
+function isToday(str) {
+  return str.split(" ")[0] === new Date().toISOString().slice(0, 10);
+}
+
+// Populate dropdown
+function populateAccountFilter() {
+  const select = document.getElementById("accountFilter");
+  select.innerHTML = "";
+
+  const placeholder = new Option("Select Account", "");
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  select.add(placeholder);
+
+  allAccountData.accounts.forEach(acc => {
+    const label = `${acc.account_type} (${acc.account_number.slice(-4)})`;
+    select.add(new Option(label, acc.account_id));
+  });
+
+  select.addEventListener("change", () => {
+    currentPage = 1;
+    updateTransactionTable(select.value);
+  });
+}
+
+// Apply filters
+function applyFilters(data) {
+  const from = document.getElementById("fromDate").value;
+  const to = document.getElementById("toDate").value;
+  const search = document.getElementById("searchInput").value.toLowerCase();
+
+  return data.filter(tx => {
+    const txDate = tx.date.split(" ")[0];
+    if (from && txDate < from) return false;
+    if (to && txDate > to) return false;
+    if (search && !tx.description.toLowerCase().includes(search) && !tx.id.toLowerCase().includes(search))
+      return false;
+    return true;
+  });
+}
+
+// Pagination
+function renderPagination(total) {
+  const pages = Math.ceil(total / rowsPerPage);
+  const ul = document.getElementById("pagination");
+  ul.innerHTML = "";
+
+  for (let i = 1; i <= pages; i++) {
+    const li = document.createElement("li");
+    li.className = "page-item " + (i === currentPage ? "active" : "");
+    li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+    li.onclick = () => {
+      currentPage = i;
+      updateTransactionTable(document.getElementById("accountFilter").value);
+    };
+    ul.appendChild(li);
+  }
+}
+
+// Render table
+function updateTransactionTable(accountId) {
+  const tbody = document.getElementById("statement-table-body");
+  const box = document.getElementById("tableSection");
+
+  if (!accountId) {
+    box.style.display = "none";
+    tbody.innerHTML = "";
+    return;
+  }
+
+  box.style.display = "block";
+
+  const account = allAccountData.accounts.find(a => a.account_id === accountId);
+  if (!account || !account.transactions) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">No transactions</td></tr>`;
+    return;
+  }
+
+  let data = [...account.transactions];
+
+  // Sort newest first
+  data.sort((a, b) => parseDateTime(b.date) - parseDateTime(a.date));
+
+  // Apply filters
+  data = applyFilters(data);
+
+  // Pagination slice
+  const start = (currentPage - 1) * rowsPerPage;
+  const page = data.slice(start, start + rowsPerPage);
+
+  renderPagination(data.length);
+
+  tbody.innerHTML = "";
+
+  if (page.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="text-center">No results</td></tr>`;
+    return;
+  }
+
+  const fmt = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
+
+  page.forEach(tx => {
+    const cls = tx.type === "credit" ? "credit" : "debit";
+    const sign = tx.type === "credit" ? "+" : "-";
+    const highlight = isToday(tx.date) ? "recent-row" : "";
+
+    tbody.innerHTML += `
+      <tr class="${highlight}">
+        <td>${tx.date.substring(0,10)}</td>
+        <td>${tx.description}</td>
+        <td><span class="badge ${tx.type === 'credit' ? 'bg-success' : 'bg-danger'}">${tx.type.toUpperCase()}</span></td>
+        <td class="text-end ${cls}">${sign} ${fmt.format(tx.amount)}</td>
+        <td class="text-end">${fmt.format(tx.balance_after)}</td>
+      </tr>
+    `;
+  });
+}
+
+// Filter listeners
+["fromDate","toDate","searchInput"].forEach(id => {
+  document.getElementById(id).addEventListener("input", () => {
+    currentPage = 1;
+    updateTransactionTable(document.getElementById("accountFilter").value);
+  });
+});
+
+// Init
+async function init() {
+  const res = await fetch("data/accounts.json?v=" + Date.now());
+  allAccountData = await res.json();
+  populateAccountFilter();
+}
+
+init();
+</script>
+
+  </body>
+</html>

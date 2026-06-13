@@ -1,0 +1,4354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <title>Financial Overview - Clone</title>
+
+    <style>
+      /*
+       * Custom CSS for the Financial Dashboard Clone
+       */
+
+      /* ---------------------------------
+         GLOBAL STYLES & COLORS
+         --------------------------------- */
+      :root {
+        --db-blue: #003057; /* A deep, dark blue for primary elements and text */
+        --db-light-blue: #0076a8; /* The vibrant blue for buttons and accents */
+        --db-active-link: #0076a8; /* Active link color */
+        --db-bg-light-grey: #f7f7f7; /* Background color for light sections/main body */
+        --db-border-color: #e5e5e5; /* Light border color */
+        --db-text-dark: #333; /* Standard dark text */
+        --db-negative-red: #d9534f; /* Red for negative balances */
+        /* --- MODAL SPECIFIC COLORS (New) --- */
+        --db-success-green: #28a745;
+        --db-success-bg: #e6ffed;
+        --db-disabled-btn-bg: #e0e0e0;
+        --db-disabled-btn-color: #888;
+        --db-progress-bg: #e9ecef;
+      }
+
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        background: #f4f6fa;
+        margin: 0;
+        color: #1a1f36;
+      }
+
+      .main-content-padding {
+        padding-left: 5rem !important; /* Matches the left padding in the image */
+        padding-right: 5rem !important; /* Matches the right padding in the image */
+        max-width: 1400px; /* Optional: Sets a max width for large screens */
+        margin: 0 auto;
+      }
+
+      /* ---------------------------------
+         NAVBAR (TOP)
+         --------------------------------- */
+      .custom-navbar {
+        background-color: white;
+        border-bottom: 1px solid var(--db-border-color);
+      }
+
+      /* NEW: Custom Border and Shadow for Dropdown Menus */
+      .dropdown-menu {
+        border: 1px solid var(--db-border-color); /* Use the defined light border color */
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow for visibility */
+      }
+
+      .logo-text {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+
+      .navbar-nav .nav-link {
+        color: var(--db-blue);
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 2px solid transparent;
+      }
+
+      .navbar-nav .nav-link:hover {
+        color: var(--db-active-link);
+      }
+
+      .navbar-nav .active-link {
+        font-weight: 600;
+        border-bottom-color: var(--db-active-link);
+        color: var(--db-active-link);
+      }
+
+      /* Ensure dropdown links still look like nav-links */
+      .navbar-nav .dropdown-toggle {
+        color: var(--db-blue);
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom: 2px solid transparent;
+      }
+      .navbar-nav .dropdown-toggle:hover {
+        color: var(--db-active-link);
+      }
+
+      .custom-nav-icons .nav-link {
+        color: var(--db-blue);
+        font-size: 0.85rem;
+      }
+
+      .custom-nav-icons .profile-icon {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* ---------------------------------
+         SUB-NAVBAR
+         --------------------------------- */
+      .sub-nav-bar {
+        background-color: var(--db-bg-light-grey);
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--db-border-color);
+      }
+
+      .sub-nav-bar .tab-link {
+        text-decoration: none;
+        color: var(--db-text-dark);
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+        display: inline-block;
+      }
+
+      .sub-nav-bar .tab-link.active {
+        font-weight: 600;
+        color: var(--db-active-link);
+        background-color: white;
+        border-radius: 4px;
+      }
+
+      /* ---------------------------------
+         BUTTONS & HEADERS
+         --------------------------------- */
+      .main-heading {
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: var(--db-blue);
+      }
+
+      .custom-blue-btn {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .custom-blue-btn:hover {
+        background-color: #006390; /* Slightly darker blue on hover */
+        border-color: #006390;
+      }
+
+      .btn-icon {
+        background: none;
+        border: none;
+        color: var(--db-blue);
+        font-size: 1.1rem;
+        padding: 0.5rem;
+      }
+
+      /* ---------------------------------
+         OVERALL BALANCE CARD
+         --------------------------------- */
+      .overall-balance-card {
+        background-color: var(--db-bg-light-grey);
+        border: none;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+      }
+
+      .overall-balance-card .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .overall-balance-card .balance-amount {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+
+      .overall-balance-card .adjust-link {
+        font-size: 0.8rem;
+        color: var(--db-light-blue);
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      /* ---------------------------------
+         TAB NAVIGATION
+         --------------------------------- */
+      .tab-navigation {
+        border-bottom: 2px solid var(--db-border-color);
+        margin-bottom: 1.5rem !important;
+      }
+
+      .tab-link {
+        text-decoration: none;
+        color: var(--db-text-dark);
+        padding: 0.5rem 1.5rem;
+        margin-right: 1rem;
+        border-bottom: 2px solid transparent;
+        font-size: 0.9rem;
+      }
+
+      .tab-link.active {
+        border-bottom-color: var(--db-active-link);
+        font-weight: 600;
+        color: var(--db-active-link);
+      }
+
+      .demo-alert {
+        background-color: #fff9e6; /* Light yellow background */
+        color: #856404; /* Darker text */
+        border-color: #ffeeba;
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+      }
+
+      /* ---------------------------------
+         FINANCIAL ITEMS
+         --------------------------------- */
+
+      /* New class for the Accounts & Cards container (outer border) */
+      .financial-card-box {
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2rem; /* Add spacing below the box */
+      }
+
+      /* Rules for the inner section when wrapped in the box */
+      .financial-card-box > .financial-section {
+        border-bottom: none !important; /* Remove the section divider line */
+        padding-bottom: 0 !important;
+        margin-top: 0 !important; /* Ensure no top margin */
+      }
+
+      /* Ensure the last item in the wrapped section has no border */
+      .financial-card-box .financial-item:last-child {
+        border-bottom: none !important;
+      }
+
+      .financial-section {
+        /* Removed original border-bottom: 1px solid var(--db-border-color); as it's not needed if everything is boxed */
+        padding-bottom: 1rem;
+      }
+
+      .section-header .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .section-header .section-total {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .financial-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 0;
+        /* ENHANCEMENT: Add hover effect and light border for item separation */
+        border-bottom: 1px solid var(--db-border-color);
+        transition: background-color 0.2s;
+        cursor: pointer;
+      }
+
+      .financial-item:hover {
+        background-color: var(--db-bg-light-grey);
+      }
+
+      .financial-item:first-of-type {
+        border-top: none; /* Remove border from the first item after the header */
+      }
+
+      /* Tweak to handle the top/bottom borders nicely */
+      .financial-section > .financial-item:last-of-type {
+        border-bottom: none;
+      }
+      /* Removed .financial-section { border-bottom: 1px solid var(--db-border-color); } as all sections are now boxed */
+
+      .item-icon {
+        font-size: 1.2rem;
+        color: var(--db-blue);
+        width: 40px;
+        flex-shrink: 0;
+        text-align: center;
+      }
+
+      .item-details {
+        flex-grow: 1;
+        margin-right: auto;
+      }
+
+      .item-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--db-blue);
+      }
+
+      .item-number {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+
+      .item-amount {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        text-align: right;
+        width: 150px; /* Fixed width for alignment */
+        flex-shrink: 0;
+      }
+
+      .negative-balance {
+        color: var(--db-negative-red);
+      }
+
+      /* Special styling for the 'Other products' currency account */
+      .other-product-item .item-amount {
+        font-weight: normal; /* Override bold */
+        color: var(--db-text-dark);
+      }
+      .other-product-item .item-amount span {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+      .other-product-item .item-amount small {
+        font-size: 0.8rem;
+        color: #6c757d !important;
+        font-weight: 400;
+      }
+
+      /* ---------------------------------
+         ADDITIONAL FEATURES
+         --------------------------------- */
+      .additional-features .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--db-text-dark);
+      }
+
+      .feature-card {
+        /* ENHANCEMENT: Add a subtle shadow to the card */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px; /* Slightly more rounded */
+        padding: 1rem 1.5rem;
+        background-color: white;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        transition: box-shadow 0.3s;
+      }
+
+      .feature-card:hover {
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .feature-icon {
+        font-size: 1.8rem;
+        color: var(--db-light-blue);
+        padding: 0.5rem;
+        border: 1px solid var(--db-border-color);
+        border-radius: 6px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .feature-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .feature-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #5cb85c; /* Green color for positive value */
+      }
+
+      .btn-icon-arrow {
+        background: none;
+        border: none;
+        color: var(--db-light-blue);
+        font-size: 1.1rem;
+      }
+
+      /* ---------------------------------
+         RESPONSIVENESS (Bootstrap handles most, but specific tweaks)
+         --------------------------------- */
+      @media (max-width: 992px) {
+        .main-content-padding {
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+        }
+
+        .custom-nav-icons {
+          display: none !important; /* Hide right icons on smaller screens for simplicity */
+        }
+
+        .navbar-collapse {
+          margin-top: 0.5rem;
+          border-top: 1px solid var(--db-border-color);
+        }
+
+        .overall-balance-card .balance-amount {
+          font-size: 1.4rem;
+        }
+
+        .financial-item {
+          flex-wrap: wrap;
+        }
+        .item-icon {
+          width: 30px;
+        }
+        .item-amount {
+          margin-left: auto;
+          width: auto;
+        }
+        .btn-icon {
+          padding: 0;
+          margin-left: 5px;
+        }
+        .item-details {
+          min-width: 150px;
+        }
+        .item-number {
+          /* Hide numbers on very small screens if necessary to save space */
+          display: block;
+        }
+      }
+
+      /* ---------------------------------
+         MODAL SPECIFIC STYLES
+         --------------------------------- */
+      .sepa-modal-content {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .sepa-modal-header {
+        background-color: white;
+        border-bottom: 1px solid var(--db-border-color);
+        padding: 1.5rem 2rem;
+      }
+
+      .sepa-modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .sepa-modal-body {
+        padding: 1.5rem 2rem;
+        background-color: var(--db-bg-light-grey);
+      }
+
+      /* Adjust modal body padding for smaller screens */
+      @media (max-width: 768px) {
+        .sepa-modal-body {
+          padding: 1rem 1rem;
+        }
+        .sepa-modal-header {
+          padding: 1rem 1rem;
+        }
+        .sepa-modal-footer {
+          padding: 1rem 1rem;
+        }
+      }
+
+      .sepa-modal-footer {
+        background-color: white;
+        border-top: 1px solid var(--db-border-color);
+        padding: 1rem 2rem;
+      }
+
+      /* Custom Buttons for Modal */
+      .custom-blue-btn.modal-nav {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+
+      .custom-back-btn {
+        border-color: var(--db-border-color);
+        color: var(--db-blue);
+        background-color: white;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+      .custom-back-btn:hover {
+        background-color: var(--db-bg-light-grey);
+        border-color: #ccc;
+        color: var(--db-blue);
+      }
+
+      .custom-continue-btn-disabled {
+        background-color: var(--db-disabled-btn-bg);
+        border-color: var(--db-disabled-btn-bg);
+        color: var(--db-disabled-btn-color);
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+        cursor: not-allowed;
+      }
+
+      /* Headers & Links */
+      .section-title-sm {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        margin-bottom: 0.5rem;
+      }
+
+      .action-link {
+        color: var(--db-light-blue);
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      /* Forms and Inputs */
+      .custom-form-control {
+        border-color: var(--db-border-color);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+      /* ENHANCEMENT: Blue focus ring */
+      .custom-form-control:focus {
+        border-color: var(--db-light-blue);
+        box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.25);
+      }
+
+      .custom-form-control:read-only {
+        background-color: #eee;
+        cursor: default;
+      }
+
+      .custom-select {
+        border-color: var(--db-border-color);
+        padding: 0.7rem 0.9rem;
+        font-size: 0.9rem;
+        color: var(--db-blue);
+        appearance: none; /* Remove default arrow */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1rem;
+        font-weight: 600; /* Make text bold for internal accounts */
+        cursor: pointer;
+      }
+      .custom-select:focus {
+        border-color: var(--db-light-blue);
+        box-shadow: 0 0 0 0.25rem rgba(0, 118, 168, 0.25);
+      }
+      .select-container {
+        position: relative;
+      }
+
+      .custom-check-btn {
+        font-size: 0.85rem;
+        padding: 0.7rem 0.9rem;
+        font-weight: 500;
+      }
+      .custom-check-btn[disabled] {
+        background-color: var(--db-disabled-btn-bg) !important;
+        border-color: var(--db-disabled-btn-bg) !important;
+        color: var(--db-disabled-btn-color) !important;
+        cursor: not-allowed;
+      }
+
+      .custom-alert-success {
+        background-color: var(--db-success-bg);
+        border-color: var(--db-success-bg);
+        color: var(--db-success-green);
+        font-size: 0.85rem;
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+      }
+
+      /* NEW: Suggestion List Styling */
+      .suggestion-item {
+        transition: background-color 0.15s ease-in-out;
+        border-radius: 6px;
+      }
+      .suggestion-item:hover {
+        background-color: #f0f0f0; /* Slight highlight on hover */
+      }
+
+      .custom-checkbox .form-check-input {
+        border-color: var(--db-border-color);
+      }
+      .custom-checkbox .form-check-input:checked {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+      .custom-checkbox .form-check-label {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* Progress Indicator */
+      .progress-indicator {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      .progress-indicator .step {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        background-color: var(--db-light-blue);
+        border-radius: 4px;
+        padding: 0.2rem 0.6rem;
+        margin-right: 0.75rem;
+      }
+      .progress-indicator .step-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--db-text-dark);
+      }
+
+      .progress-line-container {
+        width: 100%;
+        height: 4px;
+        background-color: var(--db-progress-bg);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+      }
+      .progress-line {
+        height: 100%;
+        background-color: var(--db-light-blue);
+        transition: width 0.3s ease-in-out;
+      }
+
+      /* Step 1: Account Card and Instant Payment */
+      .account-item-card {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        /* ENHANCEMENT: Slightly softer look with a shadow on the main card */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .account-item-card .item-icon-circle {
+        background-color: var(--db-bg-light-grey);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--db-blue);
+      }
+      .account-item-card .item-details {
+        margin-right: auto;
+      }
+      .account-item-card .item-name {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+      .account-item-card .item-number {
+        font-size: 0.8rem;
+        color: #6c757d;
+      }
+      .account-item-card .item-amount span {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+
+      .form-section {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--db-border-color);
+        margin-bottom: 1.5rem;
+      }
+      .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .feature-icon-sm {
+        font-size: 1.2rem;
+        color: var(--db-light-blue);
+      }
+      .custom-switch .form-check-input {
+        height: 1.5em;
+        width: 2.7em;
+        background-color: var(--db-border-color);
+        border-color: var(--db-border-color);
+      }
+      .custom-switch .form-check-input:checked {
+        background-color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+
+      /* Step 2: Amount Input */
+      .custom-amount-input {
+        max-width: 250px;
+      }
+      .custom-amount-input .custom-form-control-lg {
+        padding: 0.8rem 1rem;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        text-align: right;
+      }
+      .custom-amount-input .custom-input-group-text {
+        background-color: white;
+        border-color: var(--db-border-color);
+        color: var(--db-blue);
+        font-weight: 600;
+        font-size: 1.3rem;
+        padding: 0.8rem 1rem;
+      }
+
+      /* Step 3: Summary Card and Approval */
+      .transfer-summary-card {
+        background-color: white;
+        /* ENHANCEMENT: Add a subtle shadow */
+        border: 1px solid var(--db-border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .transfer-summary-card .summary-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .transfer-summary-card .item-avatar {
+        width: 50px;
+        height: 50px;
+        background-color: var(--db-light-blue);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .transfer-summary-card .transfer-arrow {
+        font-size: 1.5rem;
+        color: var(--db-border-color);
+        margin: 0 1rem;
+        flex-shrink: 0;
+      }
+      .transfer-summary-card .summary-details {
+        padding-top: 1rem;
+        border-top: 1px solid var(--db-border-color);
+        margin-top: 1.5rem;
+      }
+      .transfer-summary-card .detail-label {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.2rem;
+      }
+      .transfer-summary-card .detail-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--db-blue);
+      }
+
+      .approval-card {
+        background-color: var(--db-bg-light-grey);
+        /* ENHANCEMENT: Make the border slightly more prominent for focus */
+        border: 2px solid var(--db-light-blue);
+        border-radius: 8px;
+        padding: 2rem 1.5rem;
+        max-width: 450px;
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        padding-top: 3.5rem;
+        box-shadow: 0 0 10px rgba(0, 118, 168, 0.1);
+      }
+
+      .approval-icon-container {
+        position: absolute;
+        top: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        /* ENHANCEMENT: Blue ring around the icon */
+        border: 2px solid var(--db-light-blue);
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .approval-icon .db-logo-icon {
+        width: 32px;
+        height: 32px;
+        stroke: var(--db-light-blue);
+        fill: none;
+      }
+
+      .approval-device {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 0.5rem;
+      }
+      .approval-heading {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--db-blue);
+        margin-bottom: 0.75rem;
+      }
+      .approval-text {
+        font-size: 0.9rem;
+        color: var(--db-text-dark);
+      }
+
+      /* Styles for Success Message Modal */
+      .success-modal-content {
+        border-radius: 8px;
+        /* ENHANCEMENT: Add a subtle shadow */
+        border: 1px solid var(--db-success-green);
+        background-color: var(--db-success-bg);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+      }
+      .success-modal-header {
+        background-color: var(--db-success-bg);
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .success-modal-body {
+        background-color: var(--db-success-bg);
+        text-align: center;
+        padding-top: 0;
+      }
+      .success-modal-footer {
+        background-color: var(--db-success-bg);
+        border-top: none;
+      }
+      .success-icon-container {
+        width: 60px;
+        height: 60px;
+        background-color: var(--db-success-green);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem auto;
+      }
+      .success-icon-container i {
+        color: white;
+        font-size: 2.5rem;
+      }
+      .success-title {
+        color: var(--db-blue);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+      }
+      .success-text {
+        color: var(--db-text-dark);
+        font-size: 0.9rem;
+      }
+      .success-highlight {
+        font-weight: 600;
+      }
+      .btn-new-transfer {
+        border: 1px solid var(--db-light-blue);
+        color: var(--db-light-blue);
+        background-color: transparent;
+        font-size: 0.9rem;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+      }
+      .btn-new-transfer:hover {
+        background-color: rgba(0, 118, 168, 0.05);
+        color: var(--db-light-blue);
+        border-color: var(--db-light-blue);
+      }
+
+      /* New Modal: Adjust Balance Modal */
+      .adjust-modal-header {
+        background-color: var(--db-light-blue);
+        color: white;
+        border-radius: 8px 8px 0 0;
+        border-bottom: none;
+        padding: 1.5rem 2rem;
+      }
+      .adjust-modal-header .btn-close {
+        filter: invert(1);
+      }
+      .adjust-modal-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: white;
+      }
+      .adjust-modal-body {
+        padding: 2rem;
+        background-color: white;
+      }
+      .adjust-modal-footer {
+        background-color: var(--db-bg-light-grey);
+        border-top: 1px solid var(--db-border-color);
+        padding: 1rem 2rem;
+      }
+
+      .account-toggle-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px dashed var(--db-border-color);
+      }
+      .account-toggle-item:last-of-type {
+        border-bottom: none;
+      }
+
+      .account-toggle-item .toggle-name {
+        font-weight: 600;
+        color: var(--db-blue);
+        font-size: 0.95rem;
+      }
+      .account-toggle-item .toggle-amount {
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-align: right;
+        min-width: 80px;
+      }
+      .account-toggle-item .toggle-amount.negative-balance {
+        color: var(--db-negative-red);
+      }
+
+      .modal-current-balance {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--db-blue);
+      }
+      .modal-current-balance small {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #6c757d;
+      }
+
+      /* Loading Content Spinner */
+      .loading-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        min-height: 200px;
+        justify-content: center;
+      }
+      .loading-content .spinner-border {
+        color: var(--db-light-blue);
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      /* ---------------------------------
+         LOADING OVERLAY STYLES (NEW)
+         --------------------------------- */
+      .loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        /* Cover to the bottom of the main content area */
+        bottom: 0;
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.95
+        ); /* Semi-transparent white */
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        min-height: 500px; /* Ensure it has a minimum height to be visible */
+      }
+
+      .loading-spinner {
+        width: 3rem;
+        height: 3rem;
+        border: 4px solid var(--db-border-color);
+        border-top-color: var(--db-light-blue);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* 2. Hide dashboard elements when printing */
+      .no-print,
+      .dashboard-content {
+        display: block; /* Shown by default */
+      }
+      /* Added a print button specific style */
+      .print-button {
+        background-color: white;
+        border: 1px solid var(--db-border-color);
+        color: var(--db-blue);
+      }
+      .print-button:hover {
+        background-color: var(--db-bg-light-grey);
+        color: var(--db-blue);
+      }
+
+      /* Styles for print statement details (hidden by default) */
+      .print-statement-details {
+        display: none;
+      }
+
+      @media print {
+        /* 1. Hide unwanted elements for printing */
+        .no-print,
+        .custom-navbar,
+        .sub-nav-bar,
+        .tab-navigation,
+        .overall-balance-card,
+        .additional-features,
+        .custom-footer,
+        .demo-alert,
+        .btn,
+        .action-link,
+        .card .btn-icon,
+        .print-only-actions,
+        .tab-content:not(#Statements) {
+          display: none !important;
+        }
+
+        /* 2. Make the main content fill the print area */
+        .dashboard-content,
+        #Statements {
+          display: block !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+
+        .main-content-padding {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          max-width: 100% !important;
+        }
+
+        .tab-content {
+          padding-top: 0 !important;
+        }
+
+        /* 3. Show header/footer details only for printing */
+        .print-statement-details {
+          display: block !important;
+        }
+
+        /* 4. Ensure table borders are visible */
+        #statement-table,
+        #statement-table thead,
+        #statement-table tbody,
+        #statement-table th,
+        #statement-table td {
+          border-color: #000 !important;
+          color: #000 !important;
+        }
+      }
+      .sub-nav-bar .main-content-padding {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none; /* Firefox - hide scrollbar */
+      }
+
+      .sub-nav-bar .main-content-padding::-webkit-scrollbar {
+        display: none; /* Chrome/Safari - hide scrollbar */
+      }
+
+      .sub-nav-bar .tab-link {
+        flex-shrink: 0;
+        padding: 12px 16px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script>
+      const allAccounts = [
+        {
+          id: "GIRO_KONTO",
+          name: "Giro Konto",
+          number: "DE70 1174 803...199",
+          balance: 3143.82,
+          type: "current",
+          initials: "GK",
+        },
+        {
+          id: "SPAR_KONTO",
+          name: "Spar Konto",
+          number: "DE45 1174 803...456",
+          balance: 28952.69,
+          type: "savings",
+          initials: "SK",
+        },
+        {
+          id: "BAUSPARVERTRAG",
+          name: "Bausparvertrag",
+          number: "DE11 2233 445...789",
+          balance: 0,
+          type: "loan",
+          initials: "BV",
+        },
+        {
+          id: "WAEHRUNGSKONTO",
+          name: "Währungskonto (USD)",
+          number: "DE99 8765 432...100",
+          balance: 100.0,
+          type: "other",
+          initials: "WK",
+        },
+        {
+          id: "ROBIN_KONTO",
+          name: "ROBIN Konto",
+          number: "DE00 0000 000...000",
+          balance: 1000.0,
+          type: "other",
+          initials: "RK",
+        },
+      ];
+
+      // Accounts available for internal transfers (a subset of allAccounts)
+      const internalTransferAccounts = [
+        {
+          id: "GIRO_KONTO",
+          name: "Giro Konto",
+          iban: "DE70 1174 803...199",
+          initials: "GK",
+        },
+        {
+          id: "SPAR_KONTO",
+          name: "Spar Konto",
+          iban: "DE45 1174 803...456",
+          initials: "SK",
+        },
+        {
+          id: "TAGEGELD_KONTO",
+          name: "Tagesgeldkonto",
+          iban: "DE43 6786...003",
+          initials: "TG",
+        },
+      ];
+      // Fixed reference account details for the new transfer type
+      const referenceAccount = {
+        name: "Max Mustermann reference konto",
+        iban: "DE02 7001 0080 0030 8768 08",
+        initials: "MK",
+      };
+      const giroAccount = internalTransferAccounts.find(
+        (acc) => acc.id === "GIRO_KONTO"
+      );
+    </script>
+
+    <nav class="navbar navbar-expand-lg custom-navbar sticky-top no-print">
+      <div class="container-fluid main-content-padding">
+                <a class="navbar-brand logo-text" href="#">
+          <i class="bi bi-bank me-2"></i>Bank Name
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="financial-overview.html"
+                >My Finances</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active-link" href="payment-overview.html"
+                >Transfer</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Invest</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+          </ul>
+          <div
+            class="d-flex align-items-lg-center flex-column flex-lg-row custom-nav-icons ms-lg-auto"
+          >
+            <a class="nav-link me-lg-3" href="#">
+              <i class="bi bi-chat-dots"></i> Messages
+            </a>
+            <a class="nav-link me-lg-3" href="#">
+              <i class="bi bi-question-circle"></i> Help
+            </a>
+            <span class="profile-icon me-lg-3 mb-2 mb-lg-0"><a href="deposits.php">M. Mustermann</a></span>
+            <a class="nav-link" href="index.html">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <nav class="sub-nav-bar mb-4 shadow-sm no-print" id="sub-nav-bar">
+      <div class="container-fluid main-content-padding">
+        <a
+          href="#Overview"
+          class="tab-link active"
+          onclick="openTab(event, 'Overview')"
+        >
+          New Transfer
+        </a>
+        <a
+          href="#Statements"
+          class="tab-link"
+          onclick="openTab(event, 'Statements')"
+        >
+          Scheduled transfers
+        </a>
+        <a
+          href="#Insurances"
+          class="tab-link"
+          onclick="openTab(event, 'Insurances')"
+        >
+          Standing Order
+        </a>
+        <a
+          href="#DirectDebits"
+          class="tab-link"
+          onclick="openTab(event, 'DirectDebits')"
+        >
+          Direct Debits
+        </a>
+        <a
+          href="#Templates"
+          class="tab-link"
+          onclick="openTab(event, 'Templates')"
+        >
+          Templates
+        </a>
+      </div>
+    </nav>
+
+    <div class="dashboard-content">
+      <div class="loading-overlay" id="tabLoadingOverlay">
+        <div class="loading-spinner"></div>
+        <p class="text-muted">Loading content...</p>
+      </div>
+
+      <div
+        id="Overview"
+        class="tab-content container-fluid main-content-padding"
+        style="display: block; opacity: 1; transform: translateX(0%)"
+      >
+        <div class="transfer-page-container">
+          <h2 class="page-title">Create new transfer</h2>
+
+          <div class="transfer-options-grid">
+            <a
+              href="#"
+              role="button"
+              class="text-light"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+            >
+              <div class="transfer-card">
+                <div class="card-content">
+                  <span class="card-icon">€</span>
+                  <div class="card-text">
+                    <div class="card-title">Domestic & SEPA</div>
+                    <div class="card-subtitle">
+                      Standard transfer in euros within the SEPA zone
+                    </div>
+                  </div>
+                </div>
+                <div class="card-arrow">&rarr;</div>
+              </div>
+            </a>
+            <div class="transfer-card">
+              <div class="card-content">
+                <span class="card-icon">€</span>
+                <div class="card-text">
+                  <div class="card-title">Standing order</div>
+                  <div class="card-subtitle">
+                    Regular, automatic transfer of a fixed amount at a set time
+                  </div>
+                </div>
+              </div>
+              <div class="card-arrow">&rarr;</div>
+            </div>
+            <a
+              href="#"
+              role="button"
+              class="text-light"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#internalTransferModalStep1"
+            >
+              <div class="transfer-card">
+                <div class="card-content">
+                  <span class="card-icon">€</span>
+                  <div class="card-text">
+                    <div class="card-title">Internal account transfer</div>
+                    <div class="card-subtitle">
+                      Transfer to accounts within the bank for which you are
+                      authorised to access
+                    </div>
+                  </div>
+                </div>
+                <div class="card-arrow">&rarr;</div>
+              </div>
+            </a>
+
+            <div class="transfer-card">
+              <div class="card-content">
+                <span class="card-icon">€</span>
+                <div class="card-text">
+                  <div class="card-title">International & foreign currency</div>
+                  <div class="card-subtitle">
+                    Transfer in euros or in a foreign currency outside the SEPA
+                    zone
+                  </div>
+                </div>
+              </div>
+              <div class="card-arrow">&rarr;</div>
+            </div>
+            <a
+              href="#"
+              class="text-light"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#referenceTransferModalStep1"
+            >
+              <div class="transfer-card full-width">
+                <div class="card-content">
+                  <span class="card-icon">€</span>
+                  <div class="card-text">
+                    <div class="card-title">Transfer to reference account</div>
+                    <div class="card-subtitle">
+                      Transfer from a Anlagekonto, Flexgeld - or Business
+                      Flexgeldkonto to the predefined reference account
+                    </div>
+                  </div>
+                </div>
+                <div class="card-arrow">&rarr;</div>
+              </div>
+            </a>
+          </div>
+
+          <div class="separator-line"></div>
+
+          <div id="repeat-transfer-container">
+            <h3 class="section-title">Repeat transfer</h3>
+            <div class="repeat-transfer-list">
+              <div class="repeat-item">
+                <div class="repeat-avatar avatar-blue">EM</div>
+                <div class="repeat-details">
+                  <div class="repeat-name">Erika Mustermann</div>
+                  <div class="repeat-account">DE02 1001 ** 8201 01</div>
+                </div>
+                <div class="repeat-close-icon delete-item">x</div>
+              </div>
+
+              <div class="repeat-item">
+                <div class="repeat-avatar avatar-dark">M2</div>
+                <div class="repeat-details">
+                  <div class="repeat-name">Max Mustermann 2</div>
+                  <div class="repeat-account">5760 0040</div>
+                </div>
+                <div class="repeat-close-icon delete-item">x</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="separator-line"></div>
+
+          <div class="section template-section">
+            <h3 class="section-title">Use a template</h3>
+            <div class="template-header-action">
+              <span class="template-icon-small">📄</span>
+              <a href="#" class="template-link">Go to my templates</a>
+            </div>
+            <div class="template-options-flex">
+              <div class="template-card">
+                <div class="template-icon">📄</div>
+                <div class="template-details">
+                  <div class="template-title">Vorlage Erika</div>
+                  <div class="template-subtitle">Erika Mustermann</div>
+                </div>
+              </div>
+
+              <div class="template-card">
+                <div class="template-icon">📄</div>
+                <div class="template-details">
+                  <div class="template-title">foreign template</div>
+                  <div class="template-subtitle">Sophia Schmitz</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <style>
+          /* Basic Reset and Container Styling */
+          .transfer-page-container {
+            max-width: 1000px; /* Max width to mimic the app-like feel */
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            /* Use 'div' only, so we set font size/line height here */
+            font-size: 14px;
+            line-height: 1.4;
+          }
+
+          .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+          }
+
+          /* --- Transfer Options Grid Layout --- */
+
+          .transfer-options-grid {
+            display: grid;
+            /* Two columns by default */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+          }
+
+          /* ---------- TRANSFER CARD ---------- */
+          .transfer-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            border: 1px solid #e1e3ea;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: 0.2s ease;
+          }
+
+          .transfer-card:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+
+          .card-content {
+            display: flex;
+            align-items: flex-start;
+            flex-grow: 1;
+          }
+
+          .card-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            color: #007bff; /* Example icon color */
+            /* Mimic the subtle icon box */
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 5px 8px;
+            line-height: 1;
+            font-weight: bold;
+          }
+
+          .card-title {
+            font-weight: bold;
+            color: #007bff; /* Primary text color for titles */
+            margin-bottom: 3px;
+          }
+
+          .card-subtitle {
+            font-size: 12px;
+            color: #666;
+          }
+
+          .card-arrow {
+            font-size: 20px;
+            color: #007bff;
+            margin-left: 10px;
+          }
+
+          /* Special full-width card for 'Transfer to reference account' */
+          .full-width {
+            grid-column: 1 / -1; /* Spans all columns */
+          }
+
+          /* --- Repeat Transfer Section --- */
+
+          /* --- Repeat Transfer Section --- */
+
+          .section {
+            padding: 20px 0; /* Add some vertical spacing */
+          }
+
+          .section-title {
+            font-size: 18px;
+            font-weight: 600; /* Slightly bolder */
+            color: #333;
+            margin-bottom: 20px;
+          }
+
+          .repeat-transfer-list {
+            display: flex;
+            gap: 25px; /* Increase gap between items */
+            flex-wrap: wrap;
+          }
+
+          .repeat-item {
+            display: flex;
+            align-items: center;
+            /* Add subtle padding and background to make it look like a distinct element */
+            padding: 10px 15px 10px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: background-color 0.2s;
+            cursor: pointer;
+          }
+
+          .repeat-item:hover {
+            background-color: #f1f7fe; /* Light blue on hover */
+          }
+
+          /* --- Avatar Styling --- */
+
+          .repeat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            margin-right: 12px;
+            flex-shrink: 0; /* Prevent avatar from shrinking */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          }
+
+          .avatar-blue {
+            background-color: #007bff; /* Primary blue */
+          }
+
+          .avatar-dark {
+            background-color: #5a6268; /* Darker gray/blue */
+          }
+
+          /* --- Details Text Styling --- */
+
+          .repeat-details {
+            line-height: 1.3;
+          }
+
+          .repeat-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+          }
+
+          .repeat-account {
+            font-size: 12px;
+            color: #6c757d;
+          }
+
+          /* --- Cross Button Styling (Enabled) --- */
+
+          .repeat-close-icon {
+            font-size: 18px;
+            color: #dc3545; /* Red color for delete/remove action */
+            margin-left: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.7; /* Subtly dimmed when not hovered */
+            transition: color 0.2s, opacity 0.2s;
+          }
+
+          .repeat-close-icon:hover {
+            color: #c82333; /* Darker red on hover */
+            opacity: 1; /* Full opacity on hover */
+          }
+
+          /* Media Query for smaller screens */
+          @media (max-width: 600px) {
+            .repeat-transfer-list {
+              flex-direction: column; /* Stack items vertically */
+              gap: 15px;
+            }
+            .repeat-item {
+              width: 100%;
+              box-sizing: border-box;
+            }
+          }
+          /* --- Use a template Section --- */
+
+          .template-section {
+            position: relative;
+            /* Adjusts for the link alignment */
+            display: flex;
+            flex-direction: column;
+          }
+
+          .template-header-action {
+            position: absolute;
+            top: 0; /* Align with the section-title */
+            right: 0;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+          }
+
+          .template-link {
+            color: #007bff;
+            text-decoration: none;
+            margin-left: 5px;
+          }
+
+          .template-icon-small {
+            font-size: 14px;
+            color: #007bff;
+          }
+
+          .template-options-flex {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+          }
+
+          .template-card {
+            flex: 1 1 45%; /* Flex-grow, flex-shrink, basis. Allows two cards per row */
+            min-width: 250px; /* Minimum size for the card */
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            cursor: pointer;
+          }
+
+          .template-icon {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #007bff;
+          }
+
+          .separator-line {
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+          }
+
+          /* --- Media Queries for Responsiveness --- */
+
+          /* For screens smaller than 768px, switch to a single column layout */
+          @media (max-width: 768px) {
+            .transfer-options-grid {
+              grid-template-columns: 1fr; /* Single column */
+            }
+
+            /* Make the full-width card unnecessary for spanning on single column */
+            .full-width {
+              grid-column: auto;
+            }
+
+            .template-card {
+              flex: 1 1 100%; /* Single card per row */
+            }
+
+            .transfer-page-container {
+              padding: 10px;
+            }
+          }
+        </style>
+      </div>
+
+      <div
+        id="Statements"
+        class="tab-content container-fluid main-content-padding"
+        style="display: none; opacity: 0; transform: translateX(100%)"
+      >
+        <style>
+          /* ---------- TOP BAR ---------- */
+          .top-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+          }
+
+          .filter-btn,
+          .new-transfer-btn {
+            background: white;
+            border: 1px solid #d2d6e1;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: 0.2s ease;
+          }
+
+          .filter-btn:hover {
+            background: #eef1f7;
+          }
+
+          .new-transfer-btn {
+            background: #0057e7;
+            color: white;
+            border: none;
+          }
+
+          .new-transfer-btn:hover {
+            background: #0044b8;
+          }
+
+          .search-box {
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: 1px solid #d2d6e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 220px;
+          }
+
+          .search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 15px;
+          }
+
+          .transfer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+          }
+
+          .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            min-width: 220px;
+          }
+
+          .avatar {
+            width: 52px;
+            height: 52px;
+            background: #1a1f36;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 17px;
+            font-weight: 700;
+          }
+
+          .name {
+            font-weight: 700;
+            font-size: 16px;
+          }
+
+          .subtitle {
+            font-size: 13px;
+            color: #6b7280;
+          }
+
+          .account-info {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+          }
+
+          .account-info div:first-child {
+            font-weight: 600;
+          }
+
+          .amount {
+            font-size: 18px;
+            font-weight: 700;
+            white-space: nowrap;
+            min-width: 110px;
+            text-align: right;
+          }
+
+          .more {
+            font-size: 24px;
+            cursor: pointer;
+            color: #9ca3af;
+            transition: 0.2s ease;
+          }
+
+          .more:hover {
+            color: #4b5563;
+          }
+
+          /* ---------- MOBILE RESPONSIVE ---------- */
+          @media (max-width: 650px) {
+            .transfer-card {
+              flex-direction: column;
+              align-items: flex-start;
+            }
+            .amount {
+              text-align: left;
+            }
+          }
+        </style>
+
+        <div class="page-title">Scheduled transfers</div>
+
+        <div class="top-bar">
+          <div class="filter-btn">☰ Filter</div>
+
+          <div class="search-box">
+            <input type="text" placeholder="Search" />
+            🔍
+          </div>
+
+          <div class="new-transfer-btn">
+            <a
+              href="#"
+              role="button"
+              class="text-light text-decoration-none"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+              >New transfer</a
+            >
+          </div>
+        </div>
+
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+      </div>
+
+      <div
+        id="Insurances"
+        class="tab-content container-fluid main-content-padding"
+        style="display: none; opacity: 0; transform: translateX(100%)"
+      >
+
+
+
+        <div class="page-title">Standing Order</div>
+
+        <div class="top-bar">
+          <div class="filter-btn">☰ Filter</div>
+
+          <div class="search-box">
+            <input type="text" placeholder="Search" />
+            🔍
+          </div>
+
+          <div class="new-transfer-btn">
+            <a
+              href="#"
+              role="button"
+              class="text-light text-decoration-none"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+              >New Standing Order</a
+            >
+          </div>
+        </div>
+
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+      </div>
+
+
+
+      <div
+        id="DirectDebits"
+        class="tab-content container-fluid main-content-padding"
+        style="display: none; opacity: 0; transform: translateX(100%)"
+      >
+
+
+
+        <div class="page-title">Direct Debits</div>
+
+        <div class="top-bar">
+          <div class="filter-btn">☰ Filter</div>
+
+          <div class="search-box">
+            <input type="text" placeholder="Search" />
+            🔍
+          </div>
+
+          <div class="new-transfer-btn">
+            <a
+              href="#"
+              role="button"
+              class="text-light text-decoration-none"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+              >New Direct Debit</a
+            >
+          </div>
+        </div>
+
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+      </div>
+
+
+
+      <div
+        id="Templates"
+        class="tab-content container-fluid main-content-padding"
+        style="display: none; opacity: 0; transform: translateX(100%)"
+      >
+
+
+
+        <div class="page-title">templates</div>
+
+        <div class="top-bar">
+          <div class="filter-btn">☰ Filter</div>
+
+          <div class="search-box">
+            <input type="text" placeholder="Search" />
+            🔍
+          </div>
+
+          <div class="new-transfer-btn">
+            <a
+              href="#"
+              role="button"
+              class="text-light text-decoration-none"
+              style="font-weight: bold"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+              >New Template</a
+            >
+          </div>
+        </div>
+
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+        <div class="transfer-card">
+          <div class="left-section">
+            <div class="avatar">SS</div>
+
+            <div>
+              <div class="name">Sophie Schmitz</div>
+              <div class="subtitle">Alles Gute zum Geburtstag</div>
+            </div>
+          </div>
+
+          <div class="account-info">
+            <div>Giro Konto</div>
+            <div style="font-size: 13px; color: #6b7280">12/02/2025</div>
+          </div>
+
+          <div class="amount">15.00 EUR</div>
+
+          <div class="more">⋮</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div
+      class="modal fade"
+      id="sepaTransferModalStep1"
+      tabindex="-1"
+      aria-labelledby="sepaTransferModalStep1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">New SEPA transfer</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">1</span>
+              <span class="step-text">Enter data</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 33%"
+                aria-valuenow="33"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <form id="sepaTransferFormStep1">
+              <div class="form-section">
+                <p class="section-title-sm">From account</p>
+                <div class="account-item-card">
+                  <div class="item-icon-circle me-3">
+                    <i class="bi bi-wallet-fill"></i>
+                  </div>
+                  <div class="item-details">
+                    <p class="item-name mb-0">Giro Konto</p>
+                    <p class="item-number mb-0">DE70 1174 803...199</p>
+                  </div>
+                  <div class="item-amount">
+                    <span>3,143.82</span>
+                    <small>€</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Recipient</p>
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label for="payeeName" class="form-label"
+                      >Payee Name *</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control custom-form-control"
+                      id="payeeNameInput"
+                      placeholder="e.g. Jane Smith"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label for="payeeIBAN" class="form-label">IBAN *</label>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control custom-form-control"
+                        id="payeeIBANInput"
+                        placeholder="DE__ ____ ____ ____ ____ __"
+                        required
+                        maxlength="27"
+                      />
+                      <button
+                        class="btn btn-outline-secondary custom-check-btn"
+                        type="button"
+                        id="checkIbanBtn"
+                        disabled
+                      >
+                        Check
+                      </button>
+                    </div>
+                    <small
+                      id="ibanCheckFeedback"
+                      class="form-text"
+                      style="display: none"
+                      >BIC: COBADEFFXXX (Commerzbank)</small
+                    >
+                  </div>
+                </div>
+                <div class="alert custom-alert-success mt-3" role="alert">
+                  <i class="bi bi-lightbulb-fill me-2"></i>
+                  <p class="mb-0">
+                    Suggestion:
+                    <a href="#" class="action-link" id="suggestionJohnDoe"
+                      >John Doe (DE66 2157...)</a
+                    >
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Amount</p>
+                <div class="custom-amount-input">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control custom-form-control custom-form-control-lg"
+                      id="transferAmountInput"
+                      value="0,00"
+                      required
+                    />
+                    <span
+                      class="input-group-text custom-input-group-text"
+                      id="basic-addon2"
+                      >€</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Transfer details</p>
+                <div class="mb-3">
+                  <label for="transferReference" class="form-label"
+                    >Reference (optional)</label
+                  >
+                  <textarea
+                    class="form-control custom-form-control"
+                    id="transferReferenceInput"
+                    rows="2"
+                    maxlength="140"
+                    placeholder="e.g. Rent for March"
+                  ></textarea>
+                  <div class="text-end small text-muted mt-1">
+                    <span id="refCharCount">0</span>/140
+                  </div>
+                </div>
+                <div class="form-check form-switch custom-switch">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="instantPaymentSwitch"
+                  />
+                  <label class="form-check-label" for="instantPaymentSwitch"
+                    ><i class="bi bi-lightning-charge-fill me-1"></i> Instant
+                    Payment</label
+                  >
+                </div>
+                <small class="text-muted"
+                  >Transfer will arrive in seconds.</small
+                >
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn custom-continue-btn-disabled modal-nav"
+              id="sepaTransferStep1ContinueBtn"
+              data-bs-target="#sepaTransferModalStep2"
+              data-bs-toggle="modal"
+              disabled
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="sepaTransferModalStep2"
+      tabindex="-1"
+      aria-labelledby="sepaTransferModalStep2Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">Confirm SEPA transfer</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">2</span>
+              <span class="step-text">Confirmation</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 66%"
+                aria-valuenow="66"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="transfer-summary-card">
+                  <p class="section-title-sm">Transfer Summary</p>
+                  <div class="summary-item d-flex justify-content-center mb-4">
+                    <div class="text-center me-4">
+                      <div class="item-avatar">You</div>
+                      <small class="text-muted d-block mt-1">From</small>
+                    </div>
+                    <div class="transfer-arrow mt-2">
+                      <i class="bi bi-arrow-right-short"></i>
+                    </div>
+                    <div class="text-center ms-4">
+                      <div class="item-avatar" id="summaryPayeeAvatar">JS</div>
+                      <small
+                        class="text-muted d-block mt-1"
+                        id="summaryPayeeName"
+                        >Jane Smith</small
+                      >
+                    </div>
+                  </div>
+                  <hr class="mt-0" />
+                  <div class="summary-details">
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Amount</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="summaryAmount"
+                      >
+                        0,00 €
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Payee IBAN</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="summaryPayeeIBAN"
+                      >
+                        DE__ ____...
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Reference</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="summaryReference"
+                      >
+                        -
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6" id="approvalContent">
+                <div
+                  class="loading-content"
+                  id="loadingContent"
+                  style="display: none"
+                >
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="text-muted">Processing approval...</p>
+                </div>
+                <div class="approval-card">
+                  <div class="approval-icon-container">
+                    <svg
+                      class="approval-icon db-logo-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 100 100"
+                    >
+                      <circle cx="50" cy="50" r="40" stroke-width="8" />
+                      <path
+                        d="M35 50 L45 60 L65 40"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p class="text-center approval-device">
+                    Please approve on your device
+                  </p>
+                  <h6 class="text-center approval-heading">
+                    Max Mustermanns Phone
+                  </h6>
+                  <button
+                    type="button"
+                    class="btn btn-warning w-100 mb-3"
+                    id="confirmTransferButton"
+                  >
+                    Approve with BestSign
+                  </button>
+                  <p class="text-center approval-text">
+                    Please check the order in your app. Only approve the order
+                    if all details are correct.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="#" class="action-link">
+                <i class="bi bi-lock-fill me-1"></i> Manage security procedures
+              </a>
+            </div>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-target="#sepaTransferModalStep1"
+              data-bs-toggle="modal"
+              data-bs-dismiss="modal"
+              id="step2BackBtn"
+            >
+              <i class="bi bi-arrow-left me-2"></i> Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="sepaTransferModalSuccess"
+      tabindex="-1"
+      aria-labelledby="sepaTransferModalSuccessLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content success-modal-content">
+          <div class="modal-header success-modal-header">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body success-modal-body">
+            <div class="success-icon-container">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <p class="success-title">Transfer Successful</p>
+            <p class="success-text">
+              Your payment of
+              <span class="success-highlight" id="successAmountDisplay"
+                >150.00 €</span
+              >
+              to <span id="successPayeeName">Jane Smith</span> was executed
+              successfully at
+              <span class="success-highlight" id="successDateTimeDisplay"
+                >14:00 on 20.03.2024</span
+              >.
+            </p>
+          </div>
+          <div class="modal-footer success-modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary custom-blue-btn"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-new-transfer"
+              data-bs-toggle="modal"
+              data-bs-target="#sepaTransferModalStep1"
+            >
+              New Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="zurichConsentModal"
+      tabindex="-1"
+      aria-labelledby="zurichConsentModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">
+              Consent to view Zurich Insurance
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <p class="section-title-sm">Data Sharing Agreement</p>
+            <p style="font-size: 0.9rem">
+              By ticking the box below, you consent to allow Online Banking to
+              retrieve your active insurance policies from Zurich Insurance
+              Group AG and display them on your dashboard. This consent is
+              revocable at any time. We will not store or share your insurance
+              policy data with any third parties.
+            </p>
+            <div class="form-check custom-checkbox mt-4">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="consentCheckbox"
+              />
+              <label class="form-check-label" for="consentCheckbox">
+                I agree to the terms and conditions and grant consent.
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn custom-continue-btn-disabled modal-nav"
+              id="consentAgreeButton"
+              disabled
+            >
+              I Agree
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="zurichConsentSuccessModal"
+      tabindex="-1"
+      aria-labelledby="zurichConsentSuccessModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content success-modal-content">
+          <div class="modal-header success-modal-header">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body success-modal-body">
+            <div class="success-icon-container">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <p class="success-title">Consent Granted</p>
+            <p class="success-text">
+              Your consent has been successfully recorded. Your Zurich insurance
+              policies are now visible on your dashboard.
+            </p>
+          </div>
+          <div class="modal-footer success-modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary custom-blue-btn"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="policyDetailsModal"
+      tabindex="-1"
+      aria-labelledby="policyDetailsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5
+              class="modal-title sepa-modal-title"
+              id="policyDetailsModalLabel"
+            >
+              Policy Details: Lebensversicherung
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <p class="section-title-sm">Contract Information</p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <a href="#" class="btn btn-primary custom-blue-btn" target="_blank">
+              Manage Policy Online
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="internalTransferModalStep1"
+      tabindex="-1"
+      aria-labelledby="internalTransferModalStep1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">Internal Transfer</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">1</span>
+              <span class="step-text">Enter data</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 33%"
+                aria-valuenow="33"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <form id="internalTransferFormStep1">
+              <div class="form-section">
+                <p class="section-title-sm">Select Accounts</p>
+                <div class="row g-3 mb-3">
+                  <div class="col-md-6">
+                    <label for="internalTransferSender" class="form-label"
+                      >From Account *</label
+                    >
+                    <div class="select-container">
+                      <select
+                        class="form-select custom-select"
+                        id="internalTransferSender"
+                        required
+                      ></select>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="internalTransferRecipient" class="form-label"
+                      >To Account *</label
+                    >
+                    <div class="select-container">
+                      <select
+                        class="form-select custom-select"
+                        id="internalTransferRecipient"
+                        required
+                      ></select>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="alert alert-danger p-2 small"
+                  role="alert"
+                  id="internalAccountError"
+                  style="display: none"
+                >
+                  Sender and Recipient accounts must be different.
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Amount</p>
+                <div class="custom-amount-input">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control custom-form-control custom-form-control-lg"
+                      id="internalTransferAmount"
+                      value="0,00"
+                      required
+                    />
+                    <span
+                      class="input-group-text custom-input-group-text"
+                      id="basic-addon3"
+                      >€</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Transfer details</p>
+                <div class="mb-3">
+                  <label for="internalTransferReference" class="form-label"
+                    >Reference (optional)</label
+                  >
+                  <textarea
+                    class="form-control custom-form-control"
+                    id="internalTransferReference"
+                    rows="2"
+                    maxlength="140"
+                    placeholder="e.g. Savings deposit"
+                  ></textarea>
+                  <div class="text-end small text-muted mt-1">
+                    <span id="internalTransferRefCounter">0</span>/140
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn custom-continue-btn-disabled modal-nav"
+              id="internalTransferStep1ContinueBtn"
+              data-bs-target="#internalTransferModalStep2"
+              data-bs-toggle="modal"
+              disabled
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="internalTransferModalStep2"
+      tabindex="-1"
+      aria-labelledby="internalTransferModalStep2Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">
+              Confirm Internal Transfer
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">2</span>
+              <span class="step-text">Confirmation</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 66%"
+                aria-valuenow="66"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="transfer-summary-card">
+                  <p class="section-title-sm">Transfer Summary</p>
+                  <div class="summary-item d-flex justify-content-center mb-4">
+                    <div class="text-center me-4">
+                      <div class="item-avatar" id="internalSummarySenderAvatar">
+                        GK
+                      </div>
+                      <small
+                        class="text-muted d-block mt-1"
+                        id="internalSummarySenderName"
+                        >Giro Konto</small
+                      >
+                    </div>
+                    <div class="transfer-arrow mt-2">
+                      <i class="bi bi-arrow-right-short"></i>
+                    </div>
+                    <div class="text-center ms-4">
+                      <div
+                        class="item-avatar"
+                        id="internalSummaryRecipientAvatar"
+                      >
+                        T G
+                      </div>
+                      <small
+                        class="text-muted d-block mt-1"
+                        id="internalSummaryRecipientName"
+                        >Tagesgeldkonto</small
+                      >
+                    </div>
+                  </div>
+                  <hr class="mt-0" />
+                  <div class="summary-details">
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Amount</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="internalSummaryAmount"
+                      >
+                        500.00 €
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">From IBAN</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="internalSummarySenderIBAN"
+                      >
+                        DE70 1174...
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">To IBAN</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="internalSummaryRecipientIBAN"
+                      >
+                        DE43 6786...
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Reference</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="internalSummaryReference"
+                      >
+                        -
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6" id="internalApprovalContent">
+                <div
+                  class="loading-content"
+                  id="internalLoadingContent"
+                  style="display: none"
+                >
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="text-muted">Processing approval...</p>
+                </div>
+                <div class="approval-card">
+                  <div class="approval-icon-container">
+                    <svg
+                      class="approval-icon db-logo-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 100 100"
+                    >
+                      <circle cx="50" cy="50" r="40" stroke-width="8" />
+                      <path
+                        d="M35 50 L45 60 L65 40"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p class="text-center approval-device">
+                    Please approve on your device
+                  </p>
+                  <h6 class="text-center approval-heading">
+                    Max Mustermanns Phone
+                  </h6>
+                  <button
+                    type="button"
+                    class="btn btn-warning w-100 mb-3"
+                    id="confirmInternalTransferButton"
+                  >
+                    Approve with BestSign
+                  </button>
+                  <p class="text-center approval-text">
+                    Please check the order in your app. Only approve the order
+                    if all details are correct.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="#" class="action-link">
+                <i class="bi bi-lock-fill me-1"></i> Manage security procedures
+              </a>
+            </div>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-target="#internalTransferModalStep1"
+              data-bs-toggle="modal"
+              data-bs-dismiss="modal"
+              id="internalStep2BackBtn"
+            >
+              <i class="bi bi-arrow-left me-2"></i> Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="internalTransferModalSuccess"
+      tabindex="-1"
+      aria-labelledby="internalTransferModalSuccessLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content success-modal-content">
+          <div class="modal-header success-modal-header">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body success-modal-body">
+            <div class="success-icon-container">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <p class="success-title">Transfer Successful</p>
+            <p class="success-text">
+              Your internal transfer of
+              <span class="success-highlight" id="internalSuccessAmountDisplay"
+                >500.00 €</span
+              >
+              was executed successfully at
+              <span
+                class="success-highlight"
+                id="internalSuccessDateTimeDisplay"
+                >14:00 on 20.03.2024</span
+              >.
+            </p>
+          </div>
+          <div class="modal-footer success-modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary custom-blue-btn"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-new-transfer"
+              data-bs-toggle="modal"
+              data-bs-target="#internalTransferModalStep1"
+            >
+              New Internal Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+reference to transfer account -->
+
+    <div
+      class="modal fade"
+      id="referenceTransferModalStep1"
+      tabindex="-1"
+      aria-labelledby="referenceTransferModalStep1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">
+              Transfer to Reference Account
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">1</span>
+              <span class="step-text">Enter data</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 33%"
+                aria-valuenow="33"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <form id="referenceTransferFormStep1">
+              <div class="form-section">
+                <p class="section-title-sm">From account</p>
+                <div class="account-item-card">
+                  <div class="item-icon-circle me-3">
+                    <i class="bi bi-wallet-fill"></i>
+                  </div>
+                  <div class="item-details">
+                    <p class="item-name mb-0">Giro Konto</p>
+                    <p class="item-number mb-0">DE70 1174 803...199</p>
+                  </div>
+                  <div class="item-amount">
+                    <span>3,143.82</span>
+                    <small>€</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">To account (Fixed Reference)</p>
+                <div
+                  class="account-item-card"
+                  style="
+                    border-color: var(--db-light-blue);
+                    background-color: white;
+                  "
+                >
+                  <div
+                    class="item-icon-circle me-3"
+                    style="background-color: var(--db-light-blue); color: white"
+                  >
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <div class="item-details">
+                    <p class="item-name mb-0">Max Mustermann reference konto</p>
+                    <p class="item-number mb-0">DE02 7001 0080 0030 8768 08</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Amount</p>
+                <div class="custom-amount-input">
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control custom-form-control custom-form-control-lg"
+                      id="refTransferAmountInput"
+                      value="34,00"
+                      required
+                    />
+                    <span
+                      class="input-group-text custom-input-group-text"
+                      id="ref-addon-eur"
+                      >€</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <p class="section-title-sm">Transfer details</p>
+                <div class="mb-3">
+                  <label for="refTransferReference" class="form-label"
+                    >Reference (optional)</label
+                  >
+                  <textarea
+                    class="form-control custom-form-control"
+                    id="refTransferReference"
+                    rows="2"
+                    maxlength="140"
+                    placeholder="e.g. Monthly transfer"
+                  ></textarea>
+                  <div class="text-end small text-muted mt-1">
+                    <span id="refTransferRefCounter">0</span>/140
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              class="btn custom-blue-btn modal-nav"
+              id="refTransferStep1ContinueBtn"
+              data-bs-target="#referenceTransferModalStep2"
+              data-bs-toggle="modal"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="referenceTransferModalStep2"
+      tabindex="-1"
+      aria-labelledby="referenceTransferModalStep2Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content sepa-modal-content">
+          <div class="modal-header sepa-modal-header">
+            <h5 class="modal-title sepa-modal-title">
+              Confirm Reference Account Transfer
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body sepa-modal-body">
+            <div class="progress-indicator">
+              <span class="step">2</span>
+              <span class="step-text">Confirmation</span>
+            </div>
+            <div class="progress-line-container">
+              <div
+                class="progress-line"
+                style="width: 66%"
+                aria-valuenow="66"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="transfer-summary-card">
+                  <p class="section-title-sm">Transfer Summary</p>
+                  <div class="summary-item d-flex justify-content-center mb-4">
+                    <div class="text-center me-4">
+                      <div class="item-avatar">GK</div>
+                      <small class="text-muted d-block mt-1">Giro Konto</small>
+                    </div>
+                    <div class="transfer-arrow mt-2">
+                      <i class="bi bi-arrow-right-short"></i>
+                    </div>
+                    <div class="text-center ms-4">
+                      <div class="item-avatar">MK</div>
+                      <small class="text-muted d-block mt-1"
+                        >Reference Account</small
+                      >
+                    </div>
+                  </div>
+                  <hr class="mt-0" />
+                  <div class="summary-details">
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Amount</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="refSummaryAmount"
+                      >
+                        34,00 €
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">From IBAN</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="refSummarySenderIBAN"
+                      >
+                        DE70 1174...
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">To IBAN</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="refSummaryRecipientIBAN"
+                      >
+                        DE02 7001...
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col-6 detail-label">Reference</div>
+                      <div
+                        class="col-6 detail-value text-end"
+                        id="refSummaryReference"
+                      >
+                        -
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6" id="refApprovalContent">
+                <div
+                  class="loading-content"
+                  id="refLoadingContent"
+                  style="display: none"
+                >
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                  <p class="text-muted">Processing approval...</p>
+                </div>
+                <div class="approval-card">
+                  <div class="approval-icon-container">
+                    <svg
+                      class="approval-icon db-logo-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 100 100"
+                    >
+                      <circle cx="50" cy="50" r="40" stroke-width="8" />
+                      <path
+                        d="M35 50 L45 60 L65 40"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p class="text-center approval-device">
+                    Please approve on your device
+                  </p>
+                  <h6 class="text-center approval-heading">
+                    Max Mustermanns Phone
+                  </h6>
+                  <button
+                    type="button"
+                    class="btn btn-warning w-100 mb-3"
+                    id="confirmRefTransferButton"
+                  >
+                    Approve with BestSign
+                  </button>
+                  <p class="text-center approval-text">
+                    Please check the order in your app. Only approve the order
+                    if all details are correct.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-4">
+              <a href="#" class="action-link">
+                <i class="bi bi-lock-fill me-1"></i> Manage security procedures
+              </a>
+            </div>
+          </div>
+          <div class="modal-footer sepa-modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary custom-back-btn"
+              data-bs-target="#referenceTransferModalStep1"
+              data-bs-toggle="modal"
+              data-bs-dismiss="modal"
+              id="refStep2BackBtn"
+            >
+              <i class="bi bi-arrow-left me-2"></i> Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="referenceTransferModalSuccess"
+      tabindex="-1"
+      aria-labelledby="referenceTransferModalSuccessLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content success-modal-content">
+          <div class="modal-header success-modal-header">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body success-modal-body">
+            <div class="success-icon-container">
+              <i class="bi bi-check-lg"></i>
+            </div>
+            <p class="success-title">Transfer Successful</p>
+            <p class="success-text">
+              Your transfer of
+              <span class="success-highlight" id="refSuccessAmountDisplay"
+                >34,00 €</span
+              >
+              to your Reference Account was executed successfully at
+              <span class="success-highlight" id="refSuccessDateTimeDisplay"
+                >14:00 on 20.03.2024</span
+              >.
+            </p>
+          </div>
+          <div class="modal-footer success-modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary custom-blue-btn"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-new-transfer"
+              data-bs-toggle="modal"
+              data-bs-target="#referenceTransferModalStep1"
+            >
+              New Transfer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="custom-footer no-print">
+      <div class="container-fluid main-content-padding">
+        <div class="row g-2 justify-content-center">
+          <div class="col-auto">
+            <a href="#" class="text-secondary text-decoration-none small"
+              >Security</a
+            >
+          </div>
+          <div class="col-auto d-none d-md-block">
+            <span class="text-muted mx-1">|</span>
+          </div>
+          <div class="col-auto">
+            <a href="#" class="text-secondary text-decoration-none small"
+              >Imprint</a
+            >
+          </div>
+          <div class="col-auto d-none d-md-block">
+            <span class="text-muted mx-1">|</span>
+          </div>
+          <div class="col-auto">
+            <a href="#" class="text-secondary text-decoration-none small"
+              >Legal notice</a
+            >
+          </div>
+          <div class="col-auto d-none d-md-block">
+            <span class="text-muted mx-1">|</span>
+          </div>
+          <div class="col-auto">
+            <a href="#" class="text-secondary text-decoration-none small"
+              >Privacy</a
+            >
+          </div>
+          <div class="col-auto d-none d-md-block">
+            <span class="text-muted mx-1">|</span>
+          </div>
+          <div class="col-auto">
+            <a href="#" class="text-secondary text-decoration-none small"
+              >Cookies</a
+            >
+          </div>
+        </div>
+        <p class="text-muted small mt-3 mb-0">© 2025 Deutsche Bank AG</p>
+      </div>
+    </footer>
+
+    <div class="print-statement-details">
+      <div class="row mb-4">
+        <div class="col-6">
+          <p><strong>Bank Name:</strong> Deutsche Bank</p>
+          <p><strong>Account Holder:</strong> John Doe</p>
+          <p><strong>Account Name:</strong> Main Checking Account</p>
+          <p><strong>IBAN:</strong> DE12 3456 7890 1234 5678 90</p>
+        </div>
+        <div class="col-6 text-end">
+          <p><strong>Statement Date:</strong> 2024-03-25</p>
+          <p><strong>Opening Balance:</strong> 1,500.00 €</p>
+          <p><strong>Closing Balance:</strong> 3,740.00 €</p>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // ----------------------------------------------------
+      // JAVASCRIPT LOGIC
+      // ----------------------------------------------------
+
+      // --- Global Elements and Utility Functions ---
+      const overallBalanceDisplay = document.getElementById(
+        "overall-balance-display"
+      );
+      const modalOverallBalanceDisplay = document.getElementById(
+        "modal-overall-balance"
+      );
+      const accountsTotalDisplay = document.getElementById(
+        "accounts-total-display"
+      );
+      const savingsTotalDisplay = document.getElementById(
+        "savings-total-display"
+      );
+      const toggleList = document.getElementById("account-toggle-list");
+      const overallBalanceModal = document.getElementById(
+        "adjustOverallBalanceModal"
+      );
+
+      function formatCurrency(amount) {
+        return amount.toLocaleString("de-DE", {
+          style: "currency",
+          currency: "EUR",
+        });
+      }
+
+      function openTab(evt, tabName) {
+        // Show loading overlay immediately
+        const tabLoadingOverlay = document.getElementById("tabLoadingOverlay");
+        tabLoadingOverlay.style.visibility = "visible";
+        tabLoadingOverlay.style.opacity = 1;
+        tabLoadingOverlay.style.transition = "none"; // Temporarily disable transition for quick show
+
+        // Hide all tab content
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.opacity = 0;
+          tabcontent[i].style.transform = "translateX(-100%)";
+          // We keep display:block until the transition is done for the new tab, but hide this one immediately
+          // A safer way is to use transition classes or set a timeout before setting display:none
+        }
+
+        // Deactivate all tab links
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].classList.remove("active");
+        }
+
+        // Set the active link
+        evt.currentTarget.classList.add("active");
+
+        // Simulate a network/loading delay (e.g., 500ms)
+        setTimeout(() => {
+          // Hide all content again (ensures a clean state)
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+
+          // Hide loading overlay
+          tabLoadingOverlay.style.opacity = 0;
+          tabLoadingOverlay.style.visibility = "hidden";
+
+          // Show the specific tab content
+          let activeTab = document.getElementById(tabName);
+          activeTab.style.display = "block";
+          // smooth slide animation
+          setTimeout(() => {
+            activeTab.style.transition = "all 0.35s ease";
+            activeTab.style.opacity = 1;
+            activeTab.style.transform = "translateX(0%)";
+          }, 50); // Small delay for reflow/repaint
+        }, 300); // Shorter delay for better UX
+      }
+
+      /**
+       * Calculates and updates the overall balance based on which accounts are toggled on in the modal.
+       * Updates the main display and the totals in the Overview tab.
+       */
+      function updateOverallBalance() {
+        let overallTotal = 0;
+        let accountsTotal = 0;
+        let savingsTotal = 0;
+        let loanTotal = 0;
+        let accountsCount = 0;
+        let savingsCount = 0;
+        let loanCount = 0;
+        let otherCount = 0;
+
+        // Get all toggle inputs in the modal
+        const toggleInputs = toggleList.querySelectorAll(
+          'input[type="checkbox"]'
+        );
+
+        // Calculate totals first
+        allAccounts.forEach((account) => {
+          const balance = account.balance;
+          const type = account.type;
+
+          // Tally totals regardless of being included in overallTotal
+          if (type === "current") {
+            accountsTotal += balance;
+            accountsCount++;
+          }
+          if (type === "savings") {
+            savingsTotal += balance;
+            savingsCount++;
+          }
+          if (type === "loan") {
+            // Loans/Debts are tracked separately, usually negative
+            loanTotal += balance;
+            loanCount++;
+          }
+          if (type === "other") {
+            // Other accounts (like currency accounts) are positive
+            otherCount++;
+          }
+        });
+
+        // Now calculate the final OVERALL total based on toggles
+        let finalOverallTotal = 0;
+        toggleInputs.forEach((input) => {
+          const accountId = input.id.replace("toggle-", "");
+          const account = allAccounts.find((acc) => acc.id === accountId);
+          if (account && input.checked) {
+            // Exclude loans/debts from the final display, but include positive accounts
+            if (account.type !== "loan" || account.balance > 0) {
+              finalOverallTotal += account.balance;
+            }
+            // Special handling for the currency account to only include it if it's the specific USD one.
+            // This is just to demonstrate logic. The actual list should probably control this.
+            if (account.id === "WAEHRUNGSKONTO") {
+              finalOverallTotal += account.balance;
+            }
+          }
+        });
+
+        // Update displays on the main page
+        overallBalanceDisplay.textContent = formatCurrency(finalOverallTotal);
+
+        // Update modal display (number-only format)
+        modalOverallBalanceDisplay.textContent =
+          finalOverallTotal.toLocaleString("de-DE", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+
+        // Update section totals on the main page
+        accountsTotalDisplay.textContent = formatCurrency(accountsTotal);
+        savingsTotalDisplay.textContent = formatCurrency(
+          savingsTotal + loanTotal
+        ); // Include loan in savings for this display total
+
+        // Update the account counts in the headers
+        document.querySelector(
+          ".financial-card-box:nth-child(1) .section-header .section-title"
+        ).textContent = `Accounts & Cards (${accountsCount + 1})`; // +1 for the credit card which is hardcoded
+        document.querySelector(
+          ".financial-card-box:nth-child(2) .section-header .section-title"
+        ).textContent = `Savings & Investments (${savingsCount + loanCount})`;
+        document.querySelector(
+          ".financial-card-box:nth-child(3) .section-header .section-title"
+        ).textContent = `Other Products (${otherCount})`;
+      }
+
+      // ----------------------------------------------------
+      // SEPA Transfer Logic
+      // ----------------------------------------------------
+      const payeeNameInput = document.getElementById("payeeNameInput");
+      const payeeIBANInput = document.getElementById("payeeIBANInput");
+      const checkIbanBtn = document.getElementById("checkIbanBtn");
+      const ibanCheckFeedback = document.getElementById("ibanCheckFeedback");
+      const transferAmountInput = document.getElementById(
+        "transferAmountInput"
+      );
+      const transferReferenceInput = document.getElementById(
+        "transferReferenceInput"
+      );
+      const refCharCount = document.getElementById("refCharCount");
+      const sepaTransferStep1ContinueBtn = document.getElementById(
+        "sepaTransferStep1ContinueBtn"
+      );
+
+      const summaryPayeeAvatar = document.getElementById("summaryPayeeAvatar");
+      const summaryPayeeName = document.getElementById("summaryPayeeName");
+      const summaryAmount = document.getElementById("summaryAmount");
+      const summaryPayeeIBAN = document.getElementById("summaryPayeeIBAN");
+      const summaryReference = document.getElementById("summaryReference");
+      const confirmTransferButton = document.getElementById(
+        "confirmTransferButton"
+      );
+      const approvalContent = document.getElementById("approvalContent");
+      const loadingContent = document.getElementById("loadingContent");
+      const successAmountDisplay = document.getElementById(
+        "successAmountDisplay"
+      );
+      const successDateTimeDisplay = document.getElementById(
+        "successDateTimeDisplay"
+      );
+      const successPayeeName = document.getElementById("successPayeeName");
+
+      function formatAmountInput() {
+        let value = transferAmountInput.value.replace(/,/g, ".");
+        const numberValue = parseFloat(value);
+        if (isNaN(numberValue)) {
+          // If not a number, clear the input or set to 0.00
+          transferAmountInput.value = "0,00";
+        } else {
+          // Format to exactly two decimal places
+          const formattedValue = numberValue.toFixed(2).replace(/\./g, ",");
+          transferAmountInput.value = formattedValue;
+        }
+        updateButtonStates();
+      }
+
+      function updateRefCounter() {
+        refCharCount.textContent = `${transferReferenceInput.value.length}/140`;
+      }
+
+      function updateButtonStates() {
+        const nameValid = payeeNameInput.value.trim().length > 0;
+        const ibanValid = payeeIBANInput.value.replace(/\s/g, "").length >= 15;
+        const amountValue = parseFloat(
+          transferAmountInput.value.replace(/,/g, ".")
+        );
+        const amountValid = !isNaN(amountValue) && amountValue > 0;
+
+        // Check button state
+        checkIbanBtn.disabled = !ibanValid;
+
+        // Continue button state
+        const continueValid = nameValid && ibanValid && amountValid;
+        sepaTransferStep1ContinueBtn.disabled = !continueValid;
+
+        if (continueValid) {
+          sepaTransferStep1ContinueBtn.classList.remove(
+            "custom-continue-btn-disabled"
+          );
+          sepaTransferStep1ContinueBtn.classList.add("custom-blue-btn");
+        } else {
+          sepaTransferStep1ContinueBtn.classList.add(
+            "custom-continue-btn-disabled"
+          );
+          sepaTransferStep1ContinueBtn.classList.remove("custom-blue-btn");
+        }
+      }
+
+      function handleIbanCheck() {
+        // Simple simulation of an IBAN check success
+        ibanCheckFeedback.style.display = "block";
+      }
+
+      function selectSuggestion(name, iban) {
+        payeeNameInput.value = name;
+        payeeIBANInput.value = iban.replace("...", " 2975 00"); // Fill in the rest
+        ibanCheckFeedback.style.display = "block";
+        updateButtonStates();
+      }
+
+      function updateSummary() {
+        const name = payeeNameInput.value;
+        const amount = transferAmountInput.value + " €";
+        const iban = payeeIBANInput.value;
+        const reference = transferReferenceInput.value || "-";
+
+        summaryPayeeName.textContent = name;
+        summaryAmount.textContent = amount;
+        summaryPayeeIBAN.textContent = iban;
+        summaryReference.textContent = reference;
+
+        // Update Avatar based on first two letters of name
+        const initials = name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2);
+        summaryPayeeAvatar.textContent = initials.padEnd(2, name[0]);
+      }
+
+      function handleConfirmTransfer() {
+        // 1. Hide approval card, show loading spinner
+        approvalContent.style.display = "none";
+        loadingContent.style.display = "flex";
+        confirmTransferButton.disabled = true;
+        document.getElementById("step2BackBtn").disabled = true;
+
+        // 2. Simulate approval time
+        setTimeout(() => {
+          // 3. Close Step 2 modal
+          const step2Modal = bootstrap.Modal.getInstance(
+            document.getElementById("sepaTransferModalStep2")
+          );
+          step2Modal.hide();
+
+          // 4. Update success modal content
+          const successModal = new bootstrap.Modal(
+            document.getElementById("sepaTransferModalSuccess")
+          );
+          successPayeeName.textContent = summaryPayeeName.textContent;
+          successAmountDisplay.textContent = summaryAmount.textContent;
+
+          const now = new Date();
+          const dateString = `${now.getDate().toString().padStart(2, "0")}.${(
+            now.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}.${now.getFullYear()}`;
+          const timeString = `${now
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+          successDateTimeDisplay.textContent = `${timeString} on ${dateString}`;
+
+          // 5. Show success modal
+          successModal.show();
+
+          // 6. Reset modals after success (optional)
+          approvalContent.style.display = "block";
+          loadingContent.style.display = "none";
+          confirmTransferButton.disabled = false;
+          document.getElementById("step2BackBtn").disabled = false;
+        }, 1500); // 1.5 seconds simulation
+      }
+
+      // --- Event Listeners for SEPA Transfer ---
+      payeeNameInput.addEventListener("input", updateButtonStates);
+      payeeIBANInput.addEventListener("input", updateButtonStates);
+      checkIbanBtn.addEventListener("click", handleIbanCheck);
+      const suggestionJohnDoe = document.getElementById("suggestionJohnDoe");
+      suggestionJohnDoe.addEventListener("click", function () {
+        selectSuggestion("John Doe", "DE66 2157 3042 0403 2975 00");
+      });
+      transferAmountInput.addEventListener("input", updateButtonStates);
+      transferAmountInput.addEventListener("blur", formatAmountInput);
+      transferReferenceInput.addEventListener("input", updateRefCounter);
+
+      // Update summary when Step 2 modal is entered/shown
+      document
+        .getElementById("sepaTransferModalStep2")
+        .addEventListener("shown.bs.modal", updateSummary);
+
+      // Final confirm button logic
+      confirmTransferButton.addEventListener("click", handleConfirmTransfer);
+
+      // ----------------------------------------------------
+      // Internal Transfer Logic
+      // ----------------------------------------------------
+      const internalTransferSender = document.getElementById(
+        "internalTransferSender"
+      );
+      const internalTransferRecipient = document.getElementById(
+        "internalTransferRecipient"
+      );
+      const internalAccountError = document.getElementById(
+        "internalAccountError"
+      );
+      const internalTransferAmount = document.getElementById(
+        "internalTransferAmount"
+      );
+      const internalTransferReference = document.getElementById(
+        "internalTransferReference"
+      );
+      const internalTransferRefCounter = document.getElementById(
+        "internalTransferRefCounter"
+      );
+      const internalTransferStep1ContinueBtn = document.getElementById(
+        "internalTransferStep1ContinueBtn"
+      );
+      const confirmInternalTransferButton = document.getElementById(
+        "confirmInternalTransferButton"
+      );
+      const internalApprovalContent = document.getElementById(
+        "internalApprovalContent"
+      );
+      const internalLoadingContent = document.getElementById(
+        "internalLoadingContent"
+      );
+      const internalSummarySenderName = document.getElementById(
+        "internalSummarySenderName"
+      );
+      const internalSummarySenderAvatar = document.getElementById(
+        "internalSummarySenderAvatar"
+      );
+      const internalSummaryRecipientName = document.getElementById(
+        "internalSummaryRecipientName"
+      );
+      const internalSummaryRecipientAvatar = document.getElementById(
+        "internalSummaryRecipientAvatar"
+      );
+      const internalSummaryAmount = document.getElementById(
+        "internalSummaryAmount"
+      );
+      const internalSummarySenderIBAN = document.getElementById(
+        "internalSummarySenderIBAN"
+      );
+      const internalSummaryRecipientIBAN = document.getElementById(
+        "internalSummaryRecipientIBAN"
+      );
+      const internalSummaryReference = document.getElementById(
+        "internalSummaryReference"
+      );
+      const internalSuccessAmountDisplay = document.getElementById(
+        "internalSuccessAmountDisplay"
+      );
+      const internalSuccessDateTimeDisplay = document.getElementById(
+        "internalSuccessDateTimeDisplay"
+      );
+
+      function populateInternalAccountSelects() {
+        // Clear existing options
+        internalTransferSender.innerHTML =
+          '<option value="" disabled selected>Select sending account</option>';
+        internalTransferRecipient.innerHTML =
+          '<option value="" disabled selected>Select receiving account</option>';
+
+        // Populate selects
+        internalTransferAccounts.forEach((account) => {
+          const senderOption = new Option(
+            `${account.name} · ${account.iban.slice(0, 14)}...`,
+            account.id
+          );
+          const recipientOption = new Option(
+            `${account.name} · ${account.iban.slice(0, 14)}...`,
+            account.id
+          );
+          internalTransferSender.appendChild(senderOption);
+          internalTransferRecipient.appendChild(recipientOption);
+        });
+
+        // Set initial values for demo if available
+        if (internalTransferAccounts.length >= 2) {
+          internalTransferSender.value = internalTransferAccounts[0].id;
+          internalTransferRecipient.value = internalTransferAccounts[1].id;
+        }
+
+        updateInternalButtonStates();
+      }
+
+      function getInitials(name) {
+        return name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase()
+          .slice(0, 2);
+      }
+
+      function updateInternalButtonStates() {
+        const sender = internalTransferSender.value;
+        const recipient = internalTransferRecipient.value;
+        const amountValue = parseFloat(
+          internalTransferAmount.value.replace(/,/g, ".")
+        );
+        const amountValid = !isNaN(amountValue) && amountValue > 0;
+        const accountsDifferent = sender && recipient && sender !== recipient;
+
+        if (!accountsDifferent) {
+          internalAccountError.style.display = "block";
+        } else {
+          internalAccountError.style.display = "none";
+        }
+
+        const continueValid =
+          sender && recipient && amountValid && accountsDifferent;
+        internalTransferStep1ContinueBtn.disabled = !continueValid;
+
+        if (continueValid) {
+          internalTransferStep1ContinueBtn.classList.remove(
+            "custom-continue-btn-disabled"
+          );
+          internalTransferStep1ContinueBtn.classList.add("custom-blue-btn");
+        } else {
+          internalTransferStep1ContinueBtn.classList.add(
+            "custom-continue-btn-disabled"
+          );
+          internalTransferStep1ContinueBtn.classList.remove("custom-blue-btn");
+        }
+      }
+
+      function updateInternalTransferRefCounter() {
+        const refLength = internalTransferReference.value.length;
+        internalTransferRefCounter.textContent = `${refLength}/140`;
+      }
+
+      function formatInternalAmountInput() {
+        let value = internalTransferAmount.value.replace(/,/g, ".");
+        const numberValue = parseFloat(value);
+        if (isNaN(numberValue)) {
+          // If not a number, clear the input or set to 0.00
+          internalTransferAmount.value = "0,00";
+        } else {
+          // Format to exactly two decimal places
+          const formattedValue = numberValue.toFixed(2).replace(/\./g, ",");
+          internalTransferAmount.value = formattedValue;
+        }
+        updateInternalButtonStates();
+      }
+
+      function updateInternalSummary() {
+        const senderAccount = internalTransferAccounts.find(
+          (acc) => acc.id === internalTransferSender.value
+        );
+        const recipientAccount = internalTransferAccounts.find(
+          (acc) => acc.id === internalTransferRecipient.value
+        );
+
+        const amount = internalTransferAmount.value + " €";
+        const reference = internalTransferReference.value || "-";
+
+        // Update names/IBANs
+        internalSummarySenderName.textContent = senderAccount
+          ? senderAccount.name
+          : "N/A";
+        internalSummarySenderIBAN.textContent = senderAccount
+          ? senderAccount.iban.slice(0, 14) + "..."
+          : "N/A";
+        internalSummaryRecipientName.textContent = recipientAccount
+          ? recipientAccount.name
+          : "N/A";
+        internalSummaryRecipientIBAN.textContent = recipientAccount
+          ? recipientAccount.iban.slice(0, 14) + "..."
+          : "N/A";
+
+        // Update initials
+        internalSummarySenderAvatar.textContent = senderAccount
+          ? getInitials(senderAccount.name)
+          : "N/A";
+        internalSummaryRecipientAvatar.textContent = recipientAccount
+          ? getInitials(recipientAccount.name)
+          : "N/A";
+
+        // Update Amount and Reference
+        internalSummaryAmount.textContent = amount;
+        internalSummaryReference.textContent = reference;
+      }
+
+      function handleConfirmInternalTransfer() {
+        // 1. Hide approval card, show loading spinner
+        internalApprovalContent.style.display = "none";
+        internalLoadingContent.style.display = "flex";
+        confirmInternalTransferButton.disabled = true;
+        document.getElementById("internalStep2BackBtn").disabled = true;
+
+        // 2. Simulate approval time
+        setTimeout(() => {
+          // 3. Close Step 2 modal
+          const step2Modal = bootstrap.Modal.getInstance(
+            document.getElementById("internalTransferModalStep2")
+          );
+          step2Modal.hide();
+
+          // 4. Update success modal content
+          const successModal = new bootstrap.Modal(
+            document.getElementById("internalTransferModalSuccess")
+          );
+          internalSuccessAmountDisplay.textContent =
+            internalSummaryAmount.textContent;
+
+          const now = new Date();
+          const dateString = `${now.getDate().toString().padStart(2, "0")}.${(
+            now.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}.${now.getFullYear()}`;
+          const timeString = `${now
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+          internalSuccessDateTimeDisplay.textContent = `${timeString} on ${dateString}`;
+
+          // 5. Show success modal
+          successModal.show();
+
+          // 6. Reset modals after success (optional)
+          internalApprovalContent.style.display = "block";
+          internalLoadingContent.style.display = "none";
+          confirmInternalTransferButton.disabled = false;
+          document.getElementById("internalStep2BackBtn").disabled = false;
+        }, 1500); // 1.5 seconds simulation
+      }
+
+      // --- Event Listeners for Internal Transfer ---
+      document
+        .getElementById("internalTransferModalStep1")
+        .addEventListener("shown.bs.modal", populateInternalAccountSelects);
+      internalTransferSender.addEventListener(
+        "change",
+        updateInternalButtonStates
+      );
+      internalTransferRecipient.addEventListener(
+        "change",
+        updateInternalButtonStates
+      );
+      internalTransferAmount.addEventListener(
+        "input",
+        updateInternalButtonStates
+      );
+      internalTransferAmount.addEventListener(
+        "blur",
+        formatInternalAmountInput
+      );
+      internalTransferReference.addEventListener(
+        "input",
+        updateInternalTransferRefCounter
+      );
+
+      // Update summary when Step 2 modal is entered/shown
+      document
+        .getElementById("internalTransferModalStep2")
+        .addEventListener("shown.bs.modal", updateInternalSummary);
+
+      // Final confirm button logic
+      confirmInternalTransferButton.addEventListener(
+        "click",
+        handleConfirmInternalTransfer
+      );
+
+      // ----------------------------------------------------
+      // Zurich Consent Logic
+      // ----------------------------------------------------
+      const zurichConsentModalElement =
+        document.getElementById("zurichConsentModal");
+      const consentCheckbox = document.getElementById("consentCheckbox");
+      const agreeButton = document.getElementById("consentAgreeButton");
+      const zurichConsentSuccessModal = new bootstrap.Modal(
+        document.getElementById("zurichConsentSuccessModal")
+      );
+
+      // 1. Enable/Disable 'I Agree' button based on checkbox state
+      consentCheckbox.addEventListener("change", function () {
+        agreeButton.disabled = !this.checked;
+        if (this.checked) {
+          agreeButton.classList.remove("custom-continue-btn-disabled");
+          agreeButton.classList.add("custom-blue-btn");
+        } else {
+          agreeButton.classList.add("custom-continue-btn-disabled");
+          agreeButton.classList.remove("custom-blue-btn");
+        }
+      });
+
+      // 2. Handle 'I agree' click (simulating consent confirmation)
+      agreeButton.addEventListener("click", function () {
+        // 1. Close the primary consent modal
+        const modalInstance = bootstrap.Modal.getInstance(
+          zurichConsentModalElement
+        );
+        modalInstance.hide();
+
+        // 2. Display the success alert modal after a small delay (to allow the first modal to fully close)
+        setTimeout(() => {
+          zurichConsentSuccessModal.show();
+        }, 200);
+      });
+
+      // ----------------------------------------------------
+      // NEW: Reference Transfer Logic
+      // ----------------------------------------------------
+      const refTransferAmountInput = document.getElementById(
+        "refTransferAmountInput"
+      );
+      const refTransferReference = document.getElementById(
+        "refTransferReference"
+      );
+      const refTransferRefCounter = document.getElementById(
+        "refTransferRefCounter"
+      );
+      const confirmRefTransferButton = document.getElementById(
+        "confirmRefTransferButton"
+      );
+      const refApprovalContent = document.getElementById("refApprovalContent");
+      const refLoadingContent = document.getElementById("refLoadingContent");
+      const refSummaryAmount = document.getElementById("refSummaryAmount");
+      const refSummaryReference = document.getElementById(
+        "refSummaryReference"
+      );
+      const refSuccessAmountDisplay = document.getElementById(
+        "refSuccessAmountDisplay"
+      );
+      const refSuccessDateTimeDisplay = document.getElementById(
+        "refSuccessDateTimeDisplay"
+      );
+
+      function formatRefAmountInput() {
+        let value = refTransferAmountInput.value.replace(/,/g, ".");
+        const numberValue = parseFloat(value);
+        if (isNaN(numberValue)) {
+          refTransferAmountInput.value = "0,00";
+        } else {
+          const formattedValue = numberValue.toFixed(2).replace(/\./g, ",");
+          refTransferAmountInput.value = formattedValue;
+        }
+      }
+
+      function updateRefTransferRefCounter() {
+        const refLength = refTransferReference.value.length;
+        refTransferRefCounter.textContent = `${refLength}/140`;
+      }
+
+      function updateRefSummary() {
+        refSummaryAmount.textContent = refTransferAmountInput.value + " €";
+        refSummaryReference.textContent = refTransferReference.value || "-";
+      }
+
+      function handleConfirmReferenceTransfer() {
+        refApprovalContent.style.display = "none";
+        refLoadingContent.style.display = "flex";
+        confirmRefTransferButton.disabled = true;
+        document.getElementById("refStep2BackBtn").disabled = true;
+
+        setTimeout(() => {
+          const step2Modal = bootstrap.Modal.getInstance(
+            document.getElementById("referenceTransferModalStep2")
+          );
+          step2Modal.hide();
+
+          const successModal = new bootstrap.Modal(
+            document.getElementById("referenceTransferModalSuccess")
+          );
+
+          refSuccessAmountDisplay.textContent = refSummaryAmount.textContent;
+
+          const now = new Date();
+          const dateString = `${now.getDate().toString().padStart(2, "0")}.${(
+            now.getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}.${now.getFullYear()}`;
+          const timeString = `${now
+            .getHours()
+            .toString()
+            .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
+          refSuccessDateTimeDisplay.textContent = `${timeString} on ${dateString}`;
+
+          successModal.show();
+
+          refApprovalContent.style.display = "block";
+          refLoadingContent.style.display = "none";
+          confirmRefTransferButton.disabled = false;
+          document.getElementById("refStep2BackBtn").disabled = false;
+        }, 1500);
+      }
+
+      // --- Event Listeners for Reference Transfer ---
+      refTransferAmountInput.addEventListener("blur", formatRefAmountInput);
+      refTransferReference.addEventListener(
+        "input",
+        updateRefTransferRefCounter
+      );
+
+      document
+        .getElementById("referenceTransferModalStep2")
+        .addEventListener("shown.bs.modal", updateRefSummary);
+
+      confirmRefTransferButton.addEventListener(
+        "click",
+        handleConfirmReferenceTransfer
+      );
+
+      // --- Final Initialization ---
+      updateOverallBalance(); // Final call for overall balance on load
+      updateButtonStates(); // Initial state check for SEPA transfer
+      updateRefCounter();
+      populateInternalAccountSelects(); // Initial setup for internal transfer selects
+      updateInternalTransferRefCounter(); // Initial state check for Internal transfer
+      updateInternalButtonStates();
+      formatInternalAmountInput();
+      formatAmountInput();
+      formatRefAmountInput(); // Initial format for new modal
+      updateRefTransferRefCounter(); // Initial ref counter for new modal
+      const subNav = document.querySelector(
+        ".sub-nav-bar .main-content-padding"
+      );
+
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      subNav.addEventListener("mousedown", (e) => {
+        isDown = true;
+        startX = e.pageX - subNav.offsetLeft;
+        scrollLeft = subNav.scrollLeft;
+      });
+
+      subNav.addEventListener("mouseleave", () => (isDown = false));
+      subNav.addEventListener("mouseup", () => (isDown = false));
+
+      subNav.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - subNav.offsetLeft;
+        const walk = (x - startX) * 2;
+        subNav.scrollLeft = scrollLeft - walk;
+      });
+    </script>
+    <script>
+      // Wait until the entire HTML document is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all elements that have the class 'delete-item' (the 'x' icons)
+        const deleteButtons = document.querySelectorAll(".delete-item");
+
+        // Loop through each delete button found
+        deleteButtons.forEach((button) => {
+          // Add an event listener to run a function when the button is clicked
+          button.addEventListener("click", function () {
+            // 'this' refers to the clicked button (the 'x')
+            // .parentElement gets the immediate parent (which is the .repeat-item div)
+            const itemToRemove = this.parentElement;
+
+            // Get the parent of the itemToRemove (the .repeat-transfer-list)
+            const parentList = itemToRemove.parentElement;
+
+            // Use removeChild to delete the entire item from the list
+            parentList.removeChild(itemToRemove);
+
+            // OPTIONAL: Add a confirmation message or visual feedback
+            console.log("Item removed:", itemToRemove);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

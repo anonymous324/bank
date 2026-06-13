@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deutsche Bank Login Flow</title>
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Variables */
+        :root {
+            --db-blue: #0054A6;
+            --db-dark-blue: #003366;
+            --light-bg: #e8eef8;
+            --text-color: #333;
+        }
+
+        /* Body and Overall Container */
+        body {
+            background: var(--light-bg);
+            color: var(--text-color);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- STATIC LAYOUT (Applies to all steps) --- */
+
+        /* LEFT SIDE - Background & Content Wrapper */
+        .left-side {
+            width: 70%; 
+            position: relative;
+            background: #255883; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Faking the Abstract Background Image */
+        .abstract-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://meine.deutsche-bank.de/media/dbbg_retina-ATGBDAKT.jpg");
+            background-size: cover;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        /* Content inside the left side (Login form) */
+        .login-wrapper {
+            width: 100%;
+            max-width: 420px;
+            z-index: 10;
+        }
+
+        /* Info Box above the login card */
+        .info-box {
+            background: white; 
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--db-blue); 
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .info-box a {
+            color: var(--db-blue);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* The actual login card */
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            /* Min-height ensures card doesn't shrink when swapping content */
+            min-height: 300px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Logo Fix: Ensures the icon and text are visible against the blue background */
+        .logo { 
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            color: white; 
+            font-weight: bold;
+            font-size: 28px;
+        }
+        
+        .logo svg {
+            margin-right: 5px;
+            fill: white; 
+        }
+
+        /* RIGHT SIDE - Sidebar (Static) */
+        .right-side {
+            width: 30%; 
+            background: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        /* Shared Form/Button Styles */
+        label {
+            font-size: 14px;
+            display: block;
+            margin-bottom: 5px;
+            color: var(--db-blue);
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .btn {
+            background: var(--db-blue);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #004080;
+        }
+
+        /* --- STEP 1: ID Input Styles --- */
+        #step-1-content h2 {
+            margin-bottom: 5px;
+            font-size: 26px;
+            font-weight: 400;
+        }
+        #step-1-content > p {
+            margin-bottom: 25px;
+            font-size: 15px;
+            color: #666;
+        }
+        .switch-link {
+            display: block;
+            margin-bottom: 30px;
+            color: var(--db-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .login-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .forgot-link {
+            color: var(--db-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        /* --- STEP 2: Password Input Styles --- */
+        #step-2-content {
+            padding-top: 20px;
+        }
+        .back-link {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            color: var(--db-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link span {
+            margin-right: 5px;
+            font-size: 20px;
+            line-height: 1;
+        }
+        .auto-login-text {
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+        .password-input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .password-input {
+            padding-right: 40px; 
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            cursor: pointer;
+        }
+        .password-form-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* --- STEP 3: Redirecting Styles (FIXED) --- */
+        #step-3-content {
+            text-align: center;
+            padding: 40px 0;
+            /* FIX: Use flex to center contents vertically and horizontally */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Centers content vertically */
+            align-items: center; /* Centers content horizontally */
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--db-blue);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+
+        /* --- Sidebar & Footer Styles (from original) --- */
+        
+        .sidebar-content {
+            padding: 20px;
+            flex-grow: 1; 
+        }
+        
+        .promo-box {
+            margin-bottom: 25px;
+            padding: 0;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .promo-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .promo-text {
+            padding: 15px;
+        }
+
+        .promo-text h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .promo-text p {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .promo-text a, .sidebar-links a {
+            color: var(--db-blue);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+        }
+
+        .sidebar-links {
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .sidebar-links h4 {
+            font-size: 15px;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-links h4 svg {
+            margin-right: 5px;
+        }
+
+        .sidebar-links p {
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #777;
+        }
+
+        .sidebar-footer {
+            background: var(--db-dark-blue);
+            color: white;
+            padding: 15px 20px;
+            font-size: 13px;
+        }
+        
+        .sidebar-footer a {
+            color: white;
+            text-decoration: none;
+            margin-right: 8px;
+            line-height: 2;
+        }
+        
+        .sidebar-footer p {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+
+        /* --- RESPONSIVENESS (from original) --- */
+        
+        @media (max-width: 1024px) {
+            .left-side {
+                width: 100%;
+                padding: 40px 20px;
+                min-height: 70vh;
+            }
+            
+            .right-side {
+                display: none; 
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .left-side {
+                min-height: 50vh; 
+                align-items: flex-start;
+                padding: 20px;
+            }
+
+            .login-wrapper {
+                max-width: 100%;
+            }
+
+            .login-card {
+                padding: 20px;
+            }
+            
+            .login-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                order: 1;
+            }
+            
+            .forgot-link {
+                text-align: center;
+                order: 2;
+            }
+
+            .sidebar-footer {
+                 display: block;
+                 width: 100%;
+                 text-align: center;
+                 padding: 15px;
+                 background: var(--db-dark-blue);
+            }
+
+            .password-form-actions {
+                justify-content: center;
+            }
+            .password-form-actions .btn {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <div class="left-side">
+        <div class="abstract-bg"></div>
+        
+        <div class="login-wrapper">
+
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c6.627 0 12 5.373 12 12s-5.373 12-12 12S0 18.627 0 12 5.373 0 12 0zm0 18.5c3.59 0 6.5-2.91 6.5-6.5S15.59 5.5 12 5.5 5.5 8.41 5.5 12s2.91 6.5 6.5 6.5zM12 7.5c2.485 0 4.5 2.015 4.5 4.5s-2.015 4.5-4.5 4.5S7.5 14.485 7.5 12 9.515 7.5 12 7.5z"/></svg>
+                Deutsche Bank
+            </div>
+
+            <div class="info-box">
+                <p><span class="icon">ℹ️</span> Don't have your PIN/password? Assign a new one in just <a href="#">a few steps</a>.</p>
+                <p>Don't have your branch/account number at hand? These can be found on the back of your Deutsche Bank Card.</p>
+            </div>
+
+            <div class="login-card">
+
+                <div id="step-1-content">
+                    <h2>Good morning</h2>
+                    <p>Please enter your credentials.</p>
+
+                    <form id="id-form">
+                        <label for="dbid">Deutsche Bank ID</label>
+                        <input type="text" value="Max_Mustermann123" id="dbid" required>
+                        
+                        <a href="#" class="switch-link">Log in with branch, account and PIN</a>
+
+                        <div class="login-actions">
+                            <a href="#" class="forgot-link">Forgotten your credentials?</a>
+                            <button type="submit" class="btn">Continue</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="step-2-content" style="display: none;">
+                    
+                    <a href="#" class="back-link" onclick="showStep(1); return false;">
+                        <span>←</span> Back to login
+                    </a>
+
+                    <p class="auto-login-text">
+                        We will log you in automatically.
+                        Simply use the **Continue** button.
+                    </p>
+
+                    <form id="password-form">
+                        <label for="password-field">Password</label>
+                        <div class="password-input-group">
+                            <input type="password" id="password-field" value="here-is-your-password" class="password-input" required>
+                            <span class="eye-icon" onclick="togglePasswordVisibility()">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </span>
+                        </div>
+                        
+                        <div class="password-form-actions">
+                            <button type="submit" class="btn">Continue</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div id="step-3-content" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>You are being redirected to your banking area...</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <div class="sidebar-content">
+            <div class="promo-box">
+                <img src="https://www.deutsche-bank.de/dam/deutschebank/de/shared/trxm/produktshop/db-festzinssparen-1200x750-typo2prz-w46351" class="promo-img" alt="2,0% FestzinsSparen">
+                <div class="promo-text">
+                    <h3>2,0% FestzinsSparen</h3>
+                    <p>2.0% p.a.* fixed interest for 12 months</p>
+                    <p>Benefit from the currently available interest rate and find an investment mix that can protect your assets.</p>
+                    <a href="#">Open online now</a>
+                </div>
+            </div>
+
+            <div class="sidebar-links">
+                <h4><span class="icon">🔒</span> Security information</h4>
+                <p>Protect yourself and your online banking. We will be happy to help you.</p>
+                <a href="#">Security at a glance</a>
+
+                <h4><span class="icon">🔑</span> Online banking access</h4>
+                <p>Here you can apply for access to your online banking.</p>
+                <a href="#">Apply for online banking access (german)</a>
+
+                <h4><span class="icon">⚙️</span> Our security procedures</h4>
+                <p>Everything you need to know about your login (german site).</p>
+                <a href="#">Security procedure</a>
+            </div>
+        </div>
+        
+        <div class="sidebar-footer">
+            <a href="#">Deutsche Version</a> • 
+            <a href="#">Help</a> • 
+            <a href="#">Demo account</a><br>
+            <a href="#">Imprint</a> • 
+            <a href="#">Legal Notice</a> • 
+            <a href="#">Data Protection</a><br>
+            <a href="#">Cookies</a>
+            <p>© 2025 Deutsche Bank AG</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Get the dynamic content wrappers inside the login-card
+    const step1Content = document.getElementById('step-1-content');
+    const step2Content = document.getElementById('step-2-content');
+    const step3Content = document.getElementById('step-3-content');
+    
+    // Get form and input references
+    const idForm = document.getElementById('id-form');
+    const passwordForm = document.getElementById('password-form');
+    const passwordField = document.getElementById('password-field');
+
+    // Function to switch steps (1: ID, 2: Password, 3: Redirecting)
+    function showStep(stepNumber) {
+        // Hide all steps first
+        step1Content.style.display = 'none';
+        step2Content.style.display = 'none';
+        step3Content.style.display = 'none';
+        
+        // Show the requested step
+        if (stepNumber === 1) {
+            step1Content.style.display = 'block';
+        } else if (stepNumber === 2) {
+            step2Content.style.display = 'block';
+        } else if (stepNumber === 3) {
+            // Note: The CSS now includes display: flex, but setting it here overrides the initial 'none'
+            step3Content.style.display = 'flex'; 
+            
+            // Start the 5-second countdown to simulate redirection
+            setTimeout(() => {
+                // After 5 seconds, simulate success and revert to the first step
+                window.location.href = 'financial-overview.html';
+                showStep(1); 
+            }, 5000); 
+        }
+    }
+    
+    // Ensure Step 1 is shown on page load
+    showStep(1);
+
+    // --- EVENT LISTENERS ---
+
+    // Handle ID form submission (Step 1 -> Step 2)
+    idForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        const dbId = document.getElementById('dbid').value;
+        if (dbId.length > 0) {
+            showStep(2);
+        } else {
+            alert('Please enter your Deutsche Bank ID.');
+        }
+    });
+    
+    // Handle Password form submission (Step 2 -> Step 3)
+    passwordForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        const password = document.getElementById('password-field').value;
+        if (password.length > 0) {
+            showStep(3);
+        } else {
+            alert('Please enter your Password.');
+        }
+    });
+
+    // Function to toggle password visibility
+    function togglePasswordVisibility() {
+        // Use document.querySelector to safely find the eye icon in the current step
+        const eyeIcon = document.querySelector('#step-2-content .eye-icon svg');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.style.fill = 'var(--db-blue)'; 
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.style.fill = 'none'; 
+        }
+    }
+</script>
+
+</body>
+</html>
